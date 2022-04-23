@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/home/home";
+import Login from "./pages/login/login";
+import SingleTrain from "./pages/SingleTrain/singleTrain";
+import Dashboard from "./pages/dashboard/dashboard";
+import Register from "./pages/register/register";
+import { useContext } from "react";
+import { AuthContext } from "./context/authContext";
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
+  console.log(currentUser);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="trains">
+            <Route path=":trainId" element={<SingleTrain />} />
+          </Route>
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
