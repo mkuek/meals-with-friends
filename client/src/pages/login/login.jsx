@@ -38,6 +38,9 @@ const Login = () => {
       <div className="login">
         <div className="title">Sign In</div>
         <form onSubmit={handleSubmit}>
+          <div className="formHeader">
+            Sign in with your MealTrain.com account
+          </div>
           <label htmlFor="email">Email</label>
           <input
             id="email"
@@ -53,10 +56,13 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button variant="contained" type="submit">
-            Login
+            Sign In
           </Button>
           {error && <span>Wrong Email or Password!</span>}
         </form>
+        <div className="signUp">
+          Don't have an account? <a href="/register">Create a free account</a>
+        </div>
       </div>
     </>
   );

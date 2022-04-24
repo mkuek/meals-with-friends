@@ -7,6 +7,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import Register from "./pages/register/register";
 import { useContext } from "react";
 import { AuthContext } from "./context/authContext";
+import CreateTrain from "./pages/createTrain/CreateTrain";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -21,6 +22,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="trains">
             <Route path=":trainId" element={<SingleTrain />} />
+            <Route path="create" element={<CreateTrain />} />
           </Route>
         </Route>
       </Routes>
