@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "../../components/navBar/Navbar";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -11,15 +11,24 @@ import {
   FormLabel,
   Grid,
   MenuItem,
-  Paper,
-  styled,
+  Select,
   TextField,
 } from "@mui/material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "@hassanmojab/react-modern-calendar-datepicker";
-import States from "../../components/States";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
+import { AuthContext } from "../../context/authContext";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,7 +66,7 @@ const CreateTrain = () => {
     address: "",
     city: "",
     state: "",
-    zipcodezip: "",
+    zipcode: "",
     phone: "",
     meal_date_start: "",
     meal_date_end: "",
@@ -77,7 +86,6 @@ const CreateTrain = () => {
       ...formContents,
       [name]: value,
     });
-    console.log(formContents);
   };
 
   const [selectedDayRange, setSelectedDayRange] = useState({
@@ -91,7 +99,30 @@ const CreateTrain = () => {
       meal_date_start: [selectedDayRange.from],
       meal_date_end: [selectedDayRange.to],
     });
-    console.log(formContents);
+  };
+
+  const { currentUser, dispatch } = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
+    try {
+      const res = await addDoc(collection(db, "train_info"), {
+        ...formContents,
+        created_time: serverTimestamp(),
+        created_by: currentUser.uid,
+      });
+      console.log(res._key.path.segments[1]);
+      const addUserToTrain = await setDoc(
+        doc(db, "users", currentUser.uid),
+        {
+          train_id: arrayUnion(res._key.path.segments[1]),
+        },
+        { merge: true }
+      );
+      alert("train info success");
+    } catch (error) {
+      console.log(error.message);
+      // ..
+    }
   };
 
   return (
@@ -172,17 +203,66 @@ const CreateTrain = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
                       <FormLabel htmlFor="state">State</FormLabel>
-                      <TextField
-                        onChange={handleFormInputs}
-                        select
-                        variant="standard"
-                        type="text"
-                        id="state"
+                      <Select
                         name="state"
+                        onChange={handleFormInputs}
+                        variant="standard"
                         fullWidth
+                        value={formContents.state}
                       >
-                        <States />
-                      </TextField>
+                        <MenuItem value="">""</MenuItem>
+                        <MenuItem value="AL">Alabama</MenuItem>
+                        <MenuItem value="AK">Alaska</MenuItem>
+                        <MenuItem value="AZ">Arizona</MenuItem>
+                        <MenuItem value="AR">Arkansas</MenuItem>
+                        <MenuItem value="CA">California</MenuItem>
+                        <MenuItem value="CO">Colorado</MenuItem>
+                        <MenuItem value="CT">Connecticut</MenuItem>
+                        <MenuItem value="DE">Delaware</MenuItem>
+                        <MenuItem value="DC">District Of Columbia</MenuItem>
+                        <MenuItem value="FL">Florida</MenuItem>
+                        <MenuItem value="GA">Georgia</MenuItem>
+                        <MenuItem value="HI">Hawaii</MenuItem>
+                        <MenuItem value="ID">Idaho</MenuItem>
+                        <MenuItem value="IL">Illinois</MenuItem>
+                        <MenuItem value="IN">Indiana</MenuItem>
+                        <MenuItem value="IA">Iowa</MenuItem>
+                        <MenuItem value="KS">Kansas</MenuItem>
+                        <MenuItem value="KY">Kentucky</MenuItem>
+                        <MenuItem value="LA">Louisiana</MenuItem>
+                        <MenuItem value="ME">Maine</MenuItem>
+                        <MenuItem value="MD">Maryland</MenuItem>
+                        <MenuItem value="MA">Massachusetts</MenuItem>
+                        <MenuItem value="MI">Michigan</MenuItem>
+                        <MenuItem value="MN">Minnesota</MenuItem>
+                        <MenuItem value="MS">Mississippi</MenuItem>
+                        <MenuItem value="MO">Missouri</MenuItem>
+                        <MenuItem value="MT">Montana</MenuItem>
+                        <MenuItem value="NE">Nebraska</MenuItem>
+                        <MenuItem value="NV">Nevada</MenuItem>
+                        <MenuItem value="NH">New Hampshire</MenuItem>
+                        <MenuItem value="NJ">New Jersey</MenuItem>
+                        <MenuItem value="NM">New Mexico</MenuItem>
+                        <MenuItem value="NY">New York</MenuItem>
+                        <MenuItem value="NC">North Carolina</MenuItem>
+                        <MenuItem value="ND">North Dakota</MenuItem>
+                        <MenuItem value="OH">Ohio</MenuItem>
+                        <MenuItem value="OK">Oklahoma</MenuItem>
+                        <MenuItem value="OR">Oregon</MenuItem>
+                        <MenuItem value="PA">Pennsylvania</MenuItem>
+                        <MenuItem value="RI">Rhode Island</MenuItem>
+                        <MenuItem value="SC">South Carolina</MenuItem>
+                        <MenuItem value="SD">South Dakota</MenuItem>
+                        <MenuItem value="TN">Tennessee</MenuItem>
+                        <MenuItem value="TX">Texas</MenuItem>
+                        <MenuItem value="UT">Utah</MenuItem>
+                        <MenuItem value="VT">Vermont</MenuItem>
+                        <MenuItem value="VA">Virginia</MenuItem>
+                        <MenuItem value="WA">Washington</MenuItem>
+                        <MenuItem value="WV">West Virginia</MenuItem>
+                        <MenuItem value="WI">Wisconsin</MenuItem>
+                        <MenuItem value="WY">Wyoming</MenuItem>
+                      </Select>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
                       <FormLabel htmlFor="zip">Postal Code</FormLabel>
@@ -209,7 +289,12 @@ const CreateTrain = () => {
                     </Grid>
                   </Grid>
                   <Grid container justify="flex-end" className="nextButton">
-                    <Button variant="contained" onClick={() => setValue(1)}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setValue(1);
+                      }}
+                    >
                       Next Step <ArrowRightIcon />
                     </Button>
                   </Grid>
@@ -349,7 +434,7 @@ const CreateTrain = () => {
                       <ArrowLeftIcon />
                       Back
                     </Button>
-                    <Button variant="contained" onClick={handleFormInputs}>
+                    <Button variant="contained" onClick={handleSubmit}>
                       Finish Setup
                     </Button>
                   </Grid>

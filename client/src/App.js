@@ -11,7 +11,6 @@ import CreateTrain from "./pages/createTrain/CreateTrain";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
-  console.log(currentUser);
   return (
     <Router>
       <Routes>

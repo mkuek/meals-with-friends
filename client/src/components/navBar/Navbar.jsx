@@ -23,7 +23,7 @@ const Navbar = () => {
         </a>
         <div className="right">
           {currentUser ? (
-            <div>
+            <>
               <Button
                 className="newTrain"
                 onClick={() => navigate("/trains/create")}
@@ -35,9 +35,9 @@ const Navbar = () => {
                 variant="contained"
                 onClick={() => dispatch({ type: "LOGOUT" })}
               >
-                Logout
+                Sign Out
               </Button>
-            </div>
+            </>
           ) : (
             <>
               <Button

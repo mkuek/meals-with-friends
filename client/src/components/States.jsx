@@ -1,8 +1,9 @@
-import { MenuItem } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import React from "react";
-const States = () => {
+const States = ({ handleFormInputs, formContents, setFormContents }) => {
   return (
     <>
+      <MenuItem value="">""</MenuItem>
       <MenuItem value="AL">Alabama</MenuItem>
       <MenuItem value="AK">Alaska</MenuItem>
       <MenuItem value="AZ">Arizona</MenuItem>

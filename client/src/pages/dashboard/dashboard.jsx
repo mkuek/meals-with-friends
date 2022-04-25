@@ -1,138 +1,61 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/navBar/Navbar";
-import {
-  Button,
-  FormLabel,
-  Grid,
-  Paper,
-  styled,
-  TextField,
-} from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-const Dashboard = () => {
-  const [formContents, setFormContents] = useState({
-    meal_recipient: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zipcodezip: "",
-    phone: "",
-    meal_date_start: "",
-    meal_date_end: "",
-    meal_adults: "",
-    meal_kids: "",
-    meal_delivery_time: "",
-    meal_instructions: "",
-    meal_favorites: "",
-    meal_non_favorite: "",
-    meal_allergy: "",
-  });
+import { Button, Divider } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
+import "./dashboard.scss";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { AuthContext } from "../../context/authContext";
+import { db } from "../../firebase";
 
-  const handleStepOne = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setFormContents({
-      ...formContents,
-      [name]: value,
+const Dashboard = () => {
+  const { currentUser } = useContext(AuthContext);
+
+  const getData = async () => {
+    const q = query(collection(db, "users"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
     });
-    console.log(formContents);
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
       <Navbar />
-      <div>Dashboard</div>
-      <form>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <FormLabel htmlFor="name">Name</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="name"
-              name="meal_recipient"
-              placeholder="Recipient name"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="email"
-              name="email"
-              placeholder="Recipient email address"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormLabel htmlFor="address">Address</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="address"
-              name="address"
-              placeholder="Optional"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <FormLabel htmlFor="city">City</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="city"
-              name="city"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <FormLabel htmlFor="state">State</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="state"
-              name="state"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <FormLabel htmlFor="zip">Postal Code</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="zip"
-              name="zipcode"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <FormLabel htmlFor="phone">Phone</FormLabel>
-            <TextField
-              onChange={handleStepOne}
-              variant="standard"
-              type="text"
-              id="phone"
-              name="phone"
-              placeholder="Optional"
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Grid container justify="flex-end" className="nextButton">
-          <Button variant="contained">
-            Next Step <ArrowRightIcon />
-          </Button>
-        </Grid>
-      </form>
+      <div className="dashboard">
+        <div className="title">My Dashboard</div>
+        <div className="dashboardBody">
+          <p>
+            Below is a list of all of the events you have created or have been
+            invited to participate in.
+          </p>
+          <div className="list">
+            <div className="left">
+              <img
+                src="https://www.mealtrain.com/content/img/app/tokens/appointments-sm.png"
+                alt="empty pic"
+              />
+            </div>
+            <div className="center">Meal Train for:</div>
+            <div className="right">
+              <Button variant="contained">
+                <SearchIcon fontSize="small" />
+                Open
+              </Button>
+              <Button variant="outlined">
+                <EditIcon fontSize="small" />
+                Make Changes
+              </Button>
+            </div>
+          </div>
+          <Divider style={{ width: "100%" }} />
+        </div>
+      </div>
     </>
   );
 };
