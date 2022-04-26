@@ -26,6 +26,13 @@ const Navbar = () => {
             <>
               <Button
                 className="newTrain"
+                onClick={() => navigate("/dashboard")}
+                variant="text"
+              >
+                My Dashboard
+              </Button>
+              <Button
+                className="newTrain"
                 onClick={() => navigate("/trains/create")}
                 variant="text"
               >

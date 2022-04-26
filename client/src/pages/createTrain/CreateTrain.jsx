@@ -77,6 +77,8 @@ const CreateTrain = () => {
     meal_favorites: "",
     meal_non_favorite: "",
     meal_allergy: "",
+    meal_members: "",
+    img: "",
   });
 
   const handleFormInputs = (event) => {
@@ -109,6 +111,7 @@ const CreateTrain = () => {
         ...formContents,
         created_time: serverTimestamp(),
         created_by: currentUser.uid,
+        meal_members: currentUser.uid,
       });
       console.log(res._key.path.segments[1]);
       const addUserToTrain = await setDoc(
