@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "@hassanmojab/react-modern-calendar-datepicker";
 import {
@@ -154,7 +155,9 @@ const CreateTrain = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                This Meal Train page is for:
+                <Typography variant="h5" component="div" color="#00BCE4">
+                  This Meal Train page is for:
+                </Typography>
                 <div>
                   <Grid container spacing={1}>
                     <Grid item xs={12}>
@@ -305,7 +308,10 @@ const CreateTrain = () => {
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <div className="calendar">
-                  Click all the days when meals can be delivered
+                  <p>
+                    <CalendarMonthIcon />
+                    Click all the days when meals can be delivered
+                  </p>
                   <Grid container className="calendar">
                     <Calendar
                       value={selectedDayRange}
