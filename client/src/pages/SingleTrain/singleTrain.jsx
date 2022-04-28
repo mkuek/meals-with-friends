@@ -20,7 +20,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SingleTrainTabs from "../../components/singleTrainTabs/SingleTrainTabs";
 
 const SingleTrain = () => {
-  const [trainInfo, setTrainInfo] = useState({ meal_members: 0 });
+  const [trainInfo, setTrainInfo] = useState({ meal_members: "0" });
   const [userInfo, setUserInfo] = useState([]);
   const { trainId } = useParams();
   const { currentUser } = useContext(AuthContext);
@@ -114,7 +114,7 @@ const SingleTrain = () => {
                   <Chip
                     color="primary"
                     size="small"
-                    label={trainInfo ? trainInfo.meal_members.length : 0}
+                    label={trainInfo ? trainInfo.meal_members.length : "none"}
                   />
                 </Typography>
                 <Button variant="contained" size="small">

@@ -12,10 +12,16 @@ import {
   MenuItem,
   Select,
   TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import { Calendar } from "@hassanmojab/react-modern-calendar-datepicker";
 import {
@@ -60,78 +66,21 @@ TabPanel.propTypes = {
 };
 
 const SingleTrainTabs = ({ trainInfo }) => {
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const [parentValue, setParentValue] = useState(0);
+  const [innerTabValue, setInnerTabValue] = useState(0);
+  const handleChangeParent = (event, newValue) => {
+    setParentValue(newValue);
   };
-  const [formContents, setFormContents] = useState({
-    meal_recipient: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zipcode: "",
-    phone: "",
-    meal_date_start: "",
-    meal_date_end: "",
-    meal_adults: "",
-    meal_kids: "",
-    meal_delivery_time: "",
-    meal_instructions: "",
-    meal_favorites: "",
-    meal_non_favorite: "",
-    meal_allergy: "",
-    meal_members: "",
-    img: "",
-  });
-
-  const handleFormInputs = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setFormContents({
-      ...formContents,
-      [name]: value,
-    });
+  const handleChangeInner = (event, newValue) => {
+    setInnerTabValue(newValue);
   };
-
-  const [selectedDayRange, setSelectedDayRange] = useState({
-    from: null,
-    to: null,
-  });
-
-  const updateDates = () => {
-    setFormContents({
-      ...formContents,
-      meal_date_start: [selectedDayRange.from],
-      meal_date_end: [selectedDayRange.to],
-    });
-  };
-
   const { currentUser, dispatch } = useContext(AuthContext);
 
-  const handleSubmit = async (e) => {
-    try {
-      const res = await addDoc(collection(db, "train_info"), {
-        ...formContents,
-        created_time: serverTimestamp(),
-        created_by: currentUser.uid,
-        meal_members: currentUser.uid,
-      });
-      console.log(res._key.path.segments[1]);
-      const addUserToTrain = await setDoc(
-        doc(db, "users", currentUser.uid),
-        {
-          train_id: arrayUnion(res._key.path.segments[1]),
-        },
-        { merge: true }
-      );
-      alert("train info success");
-    } catch (error) {
-      console.log(error.message);
-      // ..
-    }
-  };
   console.log(trainInfo.train_description);
+
+  function createData(date, availability, volunteer) {
+    return { date, availability, volunteer };
+  }
 
   const renderList = () => {
     const dates = [];
@@ -154,21 +103,44 @@ const SingleTrainTabs = ({ trainInfo }) => {
     dates.map((date) => {
       formatted.push(moment(date).format("MMMM D YYYY, dddd"));
     });
-    console.log(formatted);
+
+    return (
+      <>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableBody>
+              {dates.map((date, index) => (
+                <TableRow
+                  key={`date-${index}`}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {moment(date).format("MMMM D YYYY, dddd")}
+                  </TableCell>
+                  <TableCell align="right">available</TableCell>
+                  <TableCell align="right">available button</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    );
   };
-  renderList();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
+        padding="0"
       >
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
-              value={value}
-              onChange={handleChange}
+              value={parentValue}
+              onChange={handleChangeParent}
               aria-label="basic tabs example"
               variant="fullWidth"
               centered
@@ -178,10 +150,10 @@ const SingleTrainTabs = ({ trainInfo }) => {
               <Tab label="Donations" />
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
-            <div>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
+          <TabPanel value={parentValue} index={0}>
+            <div className="container">
+              <Grid container spacing={1} width="100%">
+                <Grid item xs={12} paddingTop={0}>
                   <div className="about">
                     {trainInfo.train_description === "" ? (
                       <div className="about-empty">
@@ -206,6 +178,100 @@ const SingleTrainTabs = ({ trainInfo }) => {
                         <Typography variant="body1" component="div">
                           {trainInfo.train_description}
                         </Typography>
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Grid
+                            container
+                            spacing={{ xs: 2, md: 3 }}
+                            columns={{ xs: 12, sm: 8, md: 12 }}
+                            alignItems="flex-start"
+                          >
+                            <Box
+                              sx={{
+                                width: "100%",
+                              }}
+                            >
+                              <Grid
+                                container
+                                justifyContent="flex-end"
+                                alignItems="center"
+                                marginTop="2rem"
+                                borderRadius="5px"
+                                sx={{ backgroundColor: "#f5f5f5" }}
+                              >
+                                <Grid item xs={5}>
+                                  <Box
+                                    sx={{
+                                      borderBottom: 1,
+                                      borderColor: "divider",
+                                      width: "100%",
+                                    }}
+                                  >
+                                    <Tabs
+                                      value={innerTabValue}
+                                      onChange={handleChangeInner}
+                                      aria-label="basic tabs example"
+                                      variant="fullWidth"
+                                      centered
+                                    >
+                                      <Tab label="List View" />
+                                      <Tab label="Calendar View" />
+                                    </Tabs>
+                                  </Box>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs
+                                  textAlign="right"
+                                  marginRight="1rem"
+                                >
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    sx={{ gap: "0.25rem" }}
+                                  >
+                                    <InfoIcon fontSize="small" />
+                                    Review all instructions
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                              <TabPanel value={innerTabValue} index={0}>
+                                <div className="listview">
+                                  {trainInfo.meal_date_start
+                                    ? renderList()
+                                    : "No Events"}
+                                </div>
+                              </TabPanel>
+                              <TabPanel value={innerTabValue} index={1}>
+                                <div className="calendar">
+                                  Click all the days when meals can be delivered
+                                  <Grid
+                                    container
+                                    className="calendar"
+                                    width="100%"
+                                  >
+                                    <FullCalendar
+                                      plugins={[dayGridPlugin]}
+                                      initialView="dayGridMonth"
+                                      events={[
+                                        {
+                                          title: "available",
+                                          date: `2022-04-26`,
+                                        },
+                                        //   {
+                                        //     title: "available",
+                                        //     date: moment(
+                                        //       `${trainInfo.meal_date_end[0].year}-${trainInfo.meal_date_end[0].month}-${trainInfo.meal_date_end[0].day}`,
+                                        //       "YYYY-M-D"
+                                        //     ).format("YYYY-MM-DD"),
+                                        //   },
+                                      ]}
+                                    />
+                                  </Grid>
+                                </div>
+                              </TabPanel>
+                            </Box>
+                          </Grid>
+                        </Box>
                       </div>
                     )}
                   </div>
@@ -213,185 +279,21 @@ const SingleTrainTabs = ({ trainInfo }) => {
               </Grid>
             </div>
           </TabPanel>
-          <TabPanel value={value} index={1}>
-            <div className="calendar">
-              Click all the days when meals can be delivered
-              <Grid container className="calendar">
-                <Grid item xs={9}>
-                  <FullCalendar
-                    plugins={[dayGridPlugin]}
-                    initialView="dayGridMonth"
-                    events={[
-                      {
-                        title: "available",
-                        date: `2022-04-26`,
-                      },
-                      {
-                        title: "available",
-                        date: moment(
-                          `${trainInfo.meal_date_end[0].year}-${trainInfo.meal_date_end[0].month}-${trainInfo.meal_date_end[0].day}`,
-                          "YYYY-M-D"
-                        ).format("YYYY-MM-DD"),
-                      },
-                    ]}
-                  />
-                </Grid>
-                <Grid item xs={9}>
-                  <FullCalendar
-                    plugins={[listPlugin]}
-                    initialView="listWeek"
-                    events={[
-                      {
-                        title: "available",
-                        date: `2022-04-26`,
-                      },
-                      {
-                        title: "available",
-                        date: `2022-04-27`,
-                      },
-                      {
-                        title: "available",
-                        date: moment(
-                          `${trainInfo.meal_date_end[0].year}-${trainInfo.meal_date_end[0].month}-${trainInfo.meal_date_end[0].day}`,
-                          "YYYY-M-D"
-                        ).format("YYYY-MM-DD"),
-                      },
-                    ]}
-                    listDayFormat={{
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                      weekday: "long",
-                    }}
-                    listDaySideFormat={false}
-                    headerToolbar={false}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container justify="flex-end" className="nextButton">
-                <Button variant="outlined" onClick={() => setValue(0)}>
-                  <ArrowLeftIcon />
-                  Back
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    updateDates();
-                    setValue(2);
-                  }}
-                >
-                  Next Step <ArrowRightIcon />
-                </Button>
-              </Grid>
-            </div>
+          <TabPanel value={parentValue} index={1}>
+            empty
           </TabPanel>
-          <TabPanel value={value} index={2}>
+          <TabPanel value={parentValue} index={2}>
             <form action="">
               <Grid container spacing={1}>
-                <Grid item xs={6}>
-                  <FormLabel htmlFor="adults"># adults to cook for</FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_adults"
-                    variant="standard"
-                    type="number"
-                    id="adults"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormLabel htmlFor="kids"># kids to cook for</FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_kids"
-                    variant="standard"
-                    type="number"
-                    id="kids"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabel htmlFor="delivery">
-                    Preferred delivery time
-                  </FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_delivery_time"
-                    variant="standard"
-                    type="text"
-                    id="delivery"
-                    placeholder="Example: 'from 5PM - 6PM' or 'around dinnertime'"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel htmlFor="instructions">
-                    Special instructions
-                  </FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_instructions"
-                    type="text"
-                    id="instructions"
-                    multiline
-                    rows={4}
-                    fullWidth
-                    placeholder="List any dropoff, delivery, or other instructions"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel htmlFor="favorite">
-                    Favorite meals/ restaurants
-                  </FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_favorites"
-                    type="text"
-                    id="favorite"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    placeholder="Examples: lasagna, chili, etc"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel htmlFor="noFav">Least Favorite meals</FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_non_favorite"
-                    type="text"
-                    id="noFav"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    placeholder="Example: anchovies, broccoli, etc"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel htmlFor="allergy">
-                    Allergies or dietary restrictions
-                  </FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    name="meal_allergy"
-                    type="text"
-                    id="allergy"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    placeholder="Example: allergic to shellfish, vegan, gluten-free, etc"
-                  />
-                </Grid>
+                <Grid item xs={6}></Grid>
+                <Grid item xs={6}></Grid>
+                <Grid item xs={12}></Grid>
+                <Grid item xs={12} sm={6} md={6}></Grid>
+                <Grid item xs={12} sm={6} md={6}></Grid>
+                <Grid item xs={12} sm={6} md={6}></Grid>
+                <Grid item xs={12} sm={6} md={6}></Grid>
               </Grid>
-              <Grid container justify="flex-end" className="nextButton">
-                <Button variant="outlined" onClick={() => setValue(1)}>
-                  <ArrowLeftIcon />
-                  Back
-                </Button>
-                <Button variant="contained" onClick={handleSubmit}>
-                  Finish Setup
-                </Button>
-              </Grid>
+              <Grid container justify="flex-end" className="nextButton"></Grid>
             </form>
           </TabPanel>
         </Box>

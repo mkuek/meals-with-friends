@@ -1,5 +1,19 @@
-.MuiBox-root {
-  width: 100%;
+.about {
+  .MuiBox-root {
+    padding: 0;
+  }
+  .about-body {
+    width: 100%;
+    gap: 1rem;
+  }
+  .about-empty {
+    display: flex;
+    justify-content: start;
+  }
+  .MuiButton-root {
+    background-color: #ffd400;
+    color: #333;
+  }
 }
 .calendar {
   display: flex;
