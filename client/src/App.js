@@ -8,6 +8,7 @@ import Register from "./pages/register/register";
 import { useContext } from "react";
 import { AuthContext } from "./context/authContext";
 import CreateTrain from "./pages/createTrain/CreateTrain";
+import VolunteerMeal from "./pages/VolunteerMeal/VolunteerMeal";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -20,7 +21,11 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="trains">
-            <Route path=":trainId" element={<SingleTrain />} />
+            <Route
+              path=":trainId/volunteer/:mealId"
+              element={<VolunteerMeal />}
+            />
+            <Route path=":trainId" element={<SingleTrain />}></Route>
             <Route path="create" element={<CreateTrain />} />
           </Route>
         </Route>

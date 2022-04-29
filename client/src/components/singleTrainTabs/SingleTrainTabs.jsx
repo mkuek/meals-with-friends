@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -34,11 +34,12 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import listPlugin from "@fullcalendar/list";
 import moment from "moment";
+import VolunteerModal from "../volunteerModal/VolunteerModal";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -68,6 +69,13 @@ TabPanel.propTypes = {
 const SingleTrainTabs = ({ trainInfo }) => {
   const [parentValue, setParentValue] = useState(0);
   const [innerTabValue, setInnerTabValue] = useState(0);
+  const [eventList, setEventList] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
+  const { trainId, mealId } = useParams();
+
+  const navigate = useNavigate();
+
   const handleChangeParent = (event, newValue) => {
     setParentValue(newValue);
   };
@@ -76,13 +84,10 @@ const SingleTrainTabs = ({ trainInfo }) => {
   };
   const { currentUser, dispatch } = useContext(AuthContext);
 
-  console.log(trainInfo.train_description);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
-  function createData(date, availability, volunteer) {
-    return { date, availability, volunteer };
-  }
-
-  const renderList = () => {
+  const trainLength = () => {
     const dates = [];
     const startDate = moment(
       `${trainInfo.meal_date_start[0].year}-${
@@ -99,6 +104,10 @@ const SingleTrainTabs = ({ trainInfo }) => {
     while (startDate.add(1, "days").diff(endDate) < 0) {
       dates.push(startDate.clone().toDate());
     }
+    return dates;
+  };
+  const renderList = () => {
+    const dates = trainLength();
     const formatted = [];
     dates.map((date) => {
       formatted.push(moment(date).format("MMMM D YYYY, dddd"));
@@ -117,8 +126,58 @@ const SingleTrainTabs = ({ trainInfo }) => {
                   <TableCell component="th" scope="row">
                     {moment(date).format("MMMM D YYYY, dddd")}
                   </TableCell>
-                  <TableCell align="right">available</TableCell>
-                  <TableCell align="right">available button</TableCell>
+                  <TableCell align="right">
+                    {trainInfo.individual_meals[index].title === "Available" ? (
+                      <>
+                        <Grid item xs>
+                          <Typography
+                            variant="subtitle1"
+                            component="div"
+                            fontWeight="bold"
+                            sx={{ color: "#3c763d" }}
+                          >
+                            This date is available
+                          </Typography>
+                        </Grid>
+                      </>
+                    ) : (
+                      <>
+                        <Grid item xs>
+                          <Typography
+                            variant="subtitle1"
+                            component="div"
+                            fontWeight="bold"
+                            sx={{ color: "#F08B1D" }}
+                          >
+                            {`${trainInfo.individual_meals[index].volunteer.first_name} ${trainInfo.individual_meals[index].volunteer.last_name}`}
+                          </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            component="div"
+                            marginTop="0rem"
+                            marginBottom="0"
+                          >
+                            {trainInfo.individual_meals[index].meal_name}
+                          </Typography>
+                        </Grid>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell align="right">
+                    {trainInfo.individual_meals[index].title ===
+                      "Available" && (
+                      <Button
+                        variant="contained"
+                        fontSize="small"
+                        onClick={() =>
+                          navigate(`/trains/${trainId}/volunteer/${index}`)
+                        }
+                        sx={{ backgroundColor: "green" }}
+                      >
+                        Volunteer for this
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -126,6 +185,56 @@ const SingleTrainTabs = ({ trainInfo }) => {
         </TableContainer>
       </>
     );
+  };
+
+  const createEvents = async () => {
+    const dates = trainLength();
+    const eventListObject = [];
+    dates.map((date, index) => {
+      eventListObject.push({
+        title: trainInfo.individual_meals[index].title || "Available",
+        date_formatted: moment(date).format("MMMM D YYYY, dddd"),
+        date: moment(date).format("YYYY-MM-DD"),
+        url: `/trains/${trainId}/volunteer/${index}`,
+        volunteer: "",
+        meal_name: "",
+        notes: "",
+        color:
+          trainInfo.individual_meals[index].title === "Available"
+            ? "#5cb85c"
+            : "#3a87a",
+      });
+    });
+    try {
+      if (trainInfo.individual_meals === "") {
+        const res = await setDoc(
+          doc(db, "train_info", trainId),
+          {
+            individual_meals: eventListObject,
+          },
+          { merge: true }
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+    setEventList({
+      events: eventListObject,
+    });
+    return eventListObject;
+  };
+
+  useEffect(() => {
+    createEvents();
+  }, [innerTabValue]);
+
+  const handleEventClick = (e) => {
+    e.jsEvent.preventDefault();
+    if (e.event.title === "Available") {
+      navigate(e.event.url);
+    } else {
+      return <VolunteerModal />;
+    }
   };
 
   return (
@@ -241,30 +350,23 @@ const SingleTrainTabs = ({ trainInfo }) => {
                                     : "No Events"}
                                 </div>
                               </TabPanel>
-                              <TabPanel value={innerTabValue} index={1}>
+                              <TabPanel
+                                value={innerTabValue}
+                                index={1}
+                                sx={{ width: "100%" }}
+                              >
                                 <div className="calendar">
-                                  Click all the days when meals can be delivered
                                   <Grid
                                     container
                                     className="calendar"
                                     width="100%"
+                                    height="100%"
                                   >
                                     <FullCalendar
                                       plugins={[dayGridPlugin]}
                                       initialView="dayGridMonth"
-                                      events={[
-                                        {
-                                          title: "available",
-                                          date: `2022-04-26`,
-                                        },
-                                        //   {
-                                        //     title: "available",
-                                        //     date: moment(
-                                        //       `${trainInfo.meal_date_end[0].year}-${trainInfo.meal_date_end[0].month}-${trainInfo.meal_date_end[0].day}`,
-                                        //       "YYYY-M-D"
-                                        //     ).format("YYYY-MM-DD"),
-                                        //   },
-                                      ]}
+                                      events={eventList}
+                                      eventClick={handleEventClick}
                                     />
                                   </Grid>
                                 </div>

@@ -114,7 +114,6 @@ const CreateTrain = () => {
         created_by: currentUser.uid,
         meal_members: currentUser.uid,
       });
-      console.log(res._key.path.segments[1]);
       const addUserToTrain = await setDoc(
         doc(db, "users", currentUser.uid),
         {
