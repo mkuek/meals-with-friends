@@ -19,6 +19,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  modalClasses,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
@@ -40,6 +41,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import moment from "moment";
 import VolunteerModal from "../volunteerModal/VolunteerModal";
+import InstructionsModal from "../instructionsModal/InstructionsModal";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,7 +72,14 @@ const SingleTrainTabs = ({ trainInfo }) => {
   const [parentValue, setParentValue] = useState(0);
   const [innerTabValue, setInnerTabValue] = useState(0);
   const [eventList, setEventList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openEventModal, setOpenEventModal] = useState({
+    open: false,
+    data: "",
+  });
+  const [openInstructionsModal, setOpenInstructionsModal] = useState({
+    open: false,
+    data: "",
+  });
 
   const { trainId, mealId } = useParams();
 
@@ -84,8 +93,19 @@ const SingleTrainTabs = ({ trainInfo }) => {
   };
   const { currentUser, dispatch } = useContext(AuthContext);
 
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenEventModal = (data) =>
+    setOpenEventModal({ open: true, data: data });
+  const handleCloseEventModal = () =>
+    setOpenEventModal({ open: false, data: "" });
+
+  const handleOpenInstructionsModal = (data) =>
+    setOpenInstructionsModal({ open: true, data: data });
+  const handleCloseInstructionsModal = () =>
+    setOpenInstructionsModal({ open: false, data: "" });
+
+  useEffect(() => {
+    createEvents();
+  }, [innerTabValue]);
 
   const trainLength = () => {
     const dates = [];
@@ -196,9 +216,9 @@ const SingleTrainTabs = ({ trainInfo }) => {
         date_formatted: moment(date).format("MMMM D YYYY, dddd"),
         date: moment(date).format("YYYY-MM-DD"),
         url: `/trains/${trainId}/volunteer/${index}`,
-        volunteer: "",
-        meal_name: "",
-        notes: "",
+        volunteer: `${trainInfo.individual_meals[index].volunteer.first_name} ${trainInfo.individual_meals[index].volunteer.last_name}`,
+        meal_name: trainInfo.individual_meals[index].meal_name,
+        notes: trainInfo.individual_meals[index].notes,
         color:
           trainInfo.individual_meals[index].title === "Available"
             ? "#5cb85c"
@@ -224,16 +244,12 @@ const SingleTrainTabs = ({ trainInfo }) => {
     return eventListObject;
   };
 
-  useEffect(() => {
-    createEvents();
-  }, [innerTabValue]);
-
   const handleEventClick = (e) => {
     e.jsEvent.preventDefault();
     if (e.event.title === "Available") {
       navigate(e.event.url);
     } else {
-      return <VolunteerModal />;
+      handleOpenEventModal(e.event);
     }
   };
 
@@ -337,9 +353,26 @@ const SingleTrainTabs = ({ trainInfo }) => {
                                     variant="contained"
                                     size="small"
                                     sx={{ gap: "0.25rem" }}
+                                    onClick={() => {
+                                      openInstructionsModal.open == false
+                                        ? handleOpenInstructionsModal(trainInfo)
+                                        : handleCloseInstructionsModal();
+                                    }}
                                   >
                                     <InfoIcon fontSize="small" />
                                     Review all instructions
+                                    <InstructionsModal
+                                      openInstructionsModal={
+                                        openInstructionsModal
+                                      }
+                                      trainInfo={openInstructionsModal.data}
+                                      setOpenInstructionsModal={
+                                        setOpenInstructionsModal
+                                      }
+                                      handleCloseInstructionsModal={
+                                        handleCloseInstructionsModal
+                                      }
+                                    />
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -369,6 +402,15 @@ const SingleTrainTabs = ({ trainInfo }) => {
                                       eventClick={handleEventClick}
                                     />
                                   </Grid>
+                                  <div className="modals">
+                                    <VolunteerModal
+                                      openEventModal={openEventModal}
+                                      meal={openEventModal.data}
+                                      handleCloseEventModal={
+                                        handleCloseEventModal
+                                      }
+                                    />
+                                  </div>
                                 </div>
                               </TabPanel>
                             </Box>

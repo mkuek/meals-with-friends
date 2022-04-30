@@ -71,7 +71,6 @@ const VolunteerMeal = () => {
     meals[mealId].notes = formContents.notes;
     meals[mealId].volunteer = userInfo;
     meals[mealId].title = formContents.meal_name;
-    console.log(meals);
     try {
       const addIndividualMeal = await updateDoc(
         doc(db, "train_info", trainId),

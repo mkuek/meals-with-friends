@@ -18,7 +18,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { AuthContext } from "../../context/authContext";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SingleTrainTabs from "../../components/singleTrainTabs/SingleTrainTabs";
-import VolunteerModal from "../../components/volunteerModal/VolunteerModal";
 
 const SingleTrain = () => {
   const [trainInfo, setTrainInfo] = useState({ meal_members: "0" });
@@ -29,14 +28,12 @@ const SingleTrain = () => {
   const getData = async () => {
     const trainListQuery = doc(db, "train_info", trainId);
     const querySnapshot = await getDoc(trainListQuery);
-    console.log(querySnapshot.data());
     setTrainInfo(querySnapshot.data());
   };
 
   const getUserData = async () => {
     const userQuery = doc(db, "users", currentUser.uid);
     const querySnapshot = await getDoc(userQuery);
-    console.log(querySnapshot.data());
     setUserInfo(querySnapshot.data());
   };
 
@@ -44,9 +41,6 @@ const SingleTrain = () => {
     getData();
     getUserData();
   }, []);
-  // useEffect(() => {
-  //   getUserData();
-  // }, [trainInfo]);
 
   return (
     <>
@@ -153,8 +147,6 @@ const SingleTrain = () => {
                     (Restaurant delivery from Grubhub)
                   </Typography>
                 </div>
-                <VolunteerModal title={"text"} />
-                <VolunteerModal title={"book"} />
               </div>
             </div>
             <div className="right">

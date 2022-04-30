@@ -13,6 +13,9 @@
   .MuiButton-root {
     background-color: #ffd400;
     color: #333;
+    &:hover {
+      background-color: #ae9101;
+    }
   }
   .MuiTableRow-root {
     .MuiButton-root {

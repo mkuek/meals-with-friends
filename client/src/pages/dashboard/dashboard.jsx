@@ -32,9 +32,7 @@ const Dashboard = () => {
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       trainList.push({ id: doc.id, data: doc.data() });
-      console.log(doc.id, " => ", doc.data());
     });
-    console.log(trainList);
     setTrainData(trainList);
     // const { train_id } = querySnapshot.data();
     // const q2 = await getDoc(doc(db, "train_info", train_id));
