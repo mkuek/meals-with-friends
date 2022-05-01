@@ -49,6 +49,13 @@
         display: flex;
         justify-content: center;
         flex: 1;
+
+        img {
+          width: 75%;
+          height: 75%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
       }
 
       .center {

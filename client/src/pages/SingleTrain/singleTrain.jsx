@@ -10,7 +10,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Badge, Button, Chip, Typography } from "@mui/material";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,10 +18,17 @@ import AddIcon from "@mui/icons-material/Add";
 import { AuthContext } from "../../context/authContext";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SingleTrainTabs from "../../components/singleTrainTabs/SingleTrainTabs";
+import AddPhotoModal from "../../components/addPhotoModal/AddPhotoModal";
 
 const SingleTrain = () => {
   const [trainInfo, setTrainInfo] = useState({ meal_members: "0" });
   const [userInfo, setUserInfo] = useState([]);
+  const [openPhotoModal, setOpenPhotoModal] = useState({
+    open: false,
+    data: "",
+  });
+
+  const navigate = useNavigate();
   const { trainId } = useParams();
   const { currentUser } = useContext(AuthContext);
 
@@ -36,6 +43,11 @@ const SingleTrain = () => {
     const querySnapshot = await getDoc(userQuery);
     setUserInfo(querySnapshot.data());
   };
+
+  const handleOpenPhotoModal = (data) =>
+    setOpenPhotoModal({ open: true, data: data });
+  const handleClosePhotoModal = () =>
+    setOpenPhotoModal({ open: false, data: "" });
 
   useEffect(() => {
     getData();
@@ -61,7 +73,11 @@ const SingleTrain = () => {
                 <ForumOutlinedIcon fontSize="small" />
                 Post an Update
               </Button>
-              <Button variant="contained" size="small">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => navigate(`/trains/${trainId}/edit`)}
+              >
                 <EditIcon fontSize="small" />
                 Make Changes
               </Button>
@@ -70,17 +86,33 @@ const SingleTrain = () => {
           <div className="body">
             <div className="left">
               <div className="photo">
-                <Button variant="contained" size="small">
-                  <AddIcon fontSize="small" />
-                  Add Photo
-                </Button>
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  sx={{ lineHeight: 1 }}
-                >
-                  Adding a photo can lead to greater participation
-                </Typography>
+                {trainInfo.img == "" ? (
+                  <>
+                    <AddPhotoModal
+                      openPhotoModal={openPhotoModal}
+                      setOpenPhotoModal={setOpenPhotoModal}
+                      trainInfo={trainInfo}
+                      handleOpenPhotoModal={handleOpenPhotoModal}
+                      handleClosePhotoModal={handleClosePhotoModal}
+                    />
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      sx={{ lineHeight: 1 }}
+                    >
+                      Adding a photo can lead to greater participation
+                    </Typography>{" "}
+                  </>
+                ) : (
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                    src={trainInfo.img}
+                  ></img>
+                )}
               </div>
               <div className="organize">
                 <Typography

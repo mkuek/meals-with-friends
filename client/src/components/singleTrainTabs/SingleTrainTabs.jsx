@@ -262,7 +262,7 @@ const SingleTrainTabs = ({ trainInfo }) => {
         padding="0"
       >
         <Box sx={{ width: "100%" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
             <Tabs
               value={parentValue}
               onChange={handleChangeParent}
@@ -303,121 +303,229 @@ const SingleTrainTabs = ({ trainInfo }) => {
                         <Typography variant="body1" component="div">
                           {trainInfo.train_description}
                         </Typography>
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            spacing={{ xs: 2, md: 3 }}
-                            columns={{ xs: 12, sm: 8, md: 12 }}
-                            alignItems="flex-start"
-                          >
-                            <Box
+                        <Grid
+                          sx={{
+                            border:
+                              "1px solid rgba(189, 189, 189, 0.5647058824)",
+                            borderRadius: "5px",
+                            boxShadow:
+                              "2px 4px 10px 1px rgb(201 201 201 / 47%)",
+                            padding: "0.5rem",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Box>
+                            <Typography
+                              variant="subtitle1"
+                              component="div"
+                              fontWeight="bold"
+                            >
+                              Location
+                            </Typography>
+                            <Typography variant="body1" component="div">
+                              {trainInfo.address || "Not Specified"}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Box>
+                              <Typography
+                                variant="subtitle1"
+                                component="div"
+                                fontWeight="bold"
+                              >
+                                Number of People
+                              </Typography>
+                              <Typography variant="body1" component="div">
+                                {trainInfo.meal_adults &&
+                                  `Adults: ${Number(trainInfo.meal_adults)} `}
+                                {(trainInfo.meal_kids &&
+                                  `Kids:${Number(trainInfo.meal_kids)}`) ||
+                                  "Not Specified"}
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography
+                                variant="subtitle1"
+                                component="div"
+                                fontWeight="bold"
+                              >
+                                Preferred delivery time
+                              </Typography>
+                              <Typography variant="body1" component="div">
+                                {trainInfo.meal_delivery_time ||
+                                  "Not Specified"}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box>
+                            <Typography
+                              variant="subtitle1"
+                              component="div"
+                              fontWeight="bold"
+                            >
+                              Special Instructions
+                            </Typography>
+                            <Typography variant="body1" component="div">
+                              {trainInfo.meal_instructions || "Not Specified"}
+                            </Typography>
+                            <Button
+                              variant="text"
+                              size="small"
                               sx={{
+                                display: "flex",
                                 width: "100%",
+                                gap: "0.25rem",
+                                justifyContent: "flex-end",
+                              }}
+                              onClick={() => {
+                                openInstructionsModal.open == false &&
+                                openInstructionsModal.data == ""
+                                  ? handleOpenInstructionsModal(trainInfo)
+                                  : handleCloseInstructionsModal();
                               }}
                             >
-                              <Grid
-                                container
-                                justifyContent="flex-end"
-                                alignItems="center"
-                                marginTop="2rem"
-                                borderRadius="5px"
-                                sx={{ backgroundColor: "#f5f5f5" }}
-                              >
-                                <Grid item xs={5}>
-                                  <Box
-                                    sx={{
-                                      borderBottom: 1,
-                                      borderColor: "divider",
-                                      width: "100%",
-                                    }}
-                                  >
-                                    <Tabs
-                                      value={innerTabValue}
-                                      onChange={handleChangeInner}
-                                      aria-label="basic tabs example"
-                                      variant="fullWidth"
-                                      centered
-                                    >
-                                      <Tab label="List View" />
-                                      <Tab label="Calendar View" />
-                                    </Tabs>
-                                  </Box>
-                                </Grid>
-                                <Grid
-                                  item
-                                  xs
-                                  textAlign="right"
-                                  marginRight="1rem"
-                                >
-                                  <Button
-                                    variant="contained"
-                                    size="small"
-                                    sx={{ gap: "0.25rem" }}
-                                    onClick={() => {
-                                      openInstructionsModal.open == false
-                                        ? handleOpenInstructionsModal(trainInfo)
-                                        : handleCloseInstructionsModal();
-                                    }}
-                                  >
-                                    <InfoIcon fontSize="small" />
-                                    Review all instructions
-                                    <InstructionsModal
-                                      openInstructionsModal={
-                                        openInstructionsModal
-                                      }
-                                      trainInfo={openInstructionsModal.data}
-                                      setOpenInstructionsModal={
-                                        setOpenInstructionsModal
-                                      }
-                                      handleCloseInstructionsModal={
-                                        handleCloseInstructionsModal
-                                      }
-                                    />
-                                  </Button>
-                                </Grid>
-                              </Grid>
-                              <TabPanel value={innerTabValue} index={0}>
-                                <div className="listview">
-                                  {trainInfo.meal_date_start
-                                    ? renderList()
-                                    : "No Events"}
-                                </div>
-                              </TabPanel>
-                              <TabPanel
-                                value={innerTabValue}
-                                index={1}
-                                sx={{ width: "100%" }}
-                              >
-                                <div className="calendar">
-                                  <Grid
-                                    container
-                                    className="calendar"
-                                    width="100%"
-                                    height="100%"
-                                  >
-                                    <FullCalendar
-                                      plugins={[dayGridPlugin]}
-                                      initialView="dayGridMonth"
-                                      events={eventList}
-                                      eventClick={handleEventClick}
-                                    />
-                                  </Grid>
-                                  <div className="modals">
-                                    <VolunteerModal
-                                      openEventModal={openEventModal}
-                                      meal={openEventModal.data}
-                                      handleCloseEventModal={
-                                        handleCloseEventModal
-                                      }
-                                    />
-                                  </div>
-                                </div>
-                              </TabPanel>
-                            </Box>
-                          </Grid>
-                        </Box>
+                              read more
+                              <InstructionsModal
+                                openInstructionsModal={openInstructionsModal}
+                                trainInfo={openInstructionsModal.data}
+                                setOpenInstructionsModal={
+                                  setOpenInstructionsModal
+                                }
+                                handleCloseInstructionsModal={
+                                  handleCloseInstructionsModal
+                                }
+                              />
+                            </Button>
+                          </Box>
+                        </Grid>
                       </div>
                     )}
+                    <div>
+                      <Box sx={{ flexGrow: 1, padding: "0" }}>
+                        <Grid
+                          container
+                          spacing={{ xs: 2, md: 3 }}
+                          columns={{ xs: 12, sm: 8, md: 12 }}
+                          alignItems="flex-start"
+                          sx={{
+                            padding: "0",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: "100%",
+                              padding: "0",
+                            }}
+                          >
+                            <Grid
+                              container
+                              justifyContent="flex-end"
+                              alignItems="center"
+                              marginTop="2rem"
+                              borderRadius="5px"
+                              sx={{ backgroundColor: "#f5f5f5", padding: "0" }}
+                            >
+                              <Grid item xs={5}>
+                                <Box
+                                  sx={{
+                                    borderBottom: 1,
+                                    borderColor: "divider",
+                                    width: "100%",
+                                  }}
+                                >
+                                  <Tabs
+                                    value={innerTabValue}
+                                    onChange={handleChangeInner}
+                                    aria-label="basic tabs example"
+                                    variant="fullWidth"
+                                    centered
+                                  >
+                                    <Tab label="List View" />
+                                    <Tab label="Calendar View" />
+                                  </Tabs>
+                                </Box>
+                              </Grid>
+                              <Grid
+                                item
+                                xs
+                                textAlign="right"
+                                marginRight="1rem"
+                              >
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    gap: "0.25rem",
+                                    backgroundColor: "#ffd400",
+                                    color: "#333",
+                                    "&:hover": { backgroundColor: "#ae9101" },
+                                  }}
+                                  onClick={() => {
+                                    openInstructionsModal.open == false
+                                      ? handleOpenInstructionsModal(trainInfo)
+                                      : handleCloseInstructionsModal();
+                                  }}
+                                >
+                                  <InfoIcon fontSize="small" />
+                                  Review all instructions
+                                  <InstructionsModal
+                                    openInstructionsModal={
+                                      openInstructionsModal
+                                    }
+                                    trainInfo={openInstructionsModal.data}
+                                    setOpenInstructionsModal={
+                                      setOpenInstructionsModal
+                                    }
+                                    handleCloseInstructionsModal={
+                                      handleCloseInstructionsModal
+                                    }
+                                  />
+                                </Button>
+                              </Grid>
+                            </Grid>
+                            <TabPanel value={innerTabValue} index={0}>
+                              <div className="listview">
+                                {trainInfo.meal_date_start
+                                  ? renderList()
+                                  : "No Events"}
+                              </div>
+                            </TabPanel>
+                            <TabPanel
+                              value={innerTabValue}
+                              index={1}
+                              sx={{ width: "100%" }}
+                            >
+                              <div className="calendar">
+                                <Grid
+                                  container
+                                  className="calendar"
+                                  width="100%"
+                                  height="100%"
+                                >
+                                  <FullCalendar
+                                    plugins={[dayGridPlugin]}
+                                    initialView="dayGridMonth"
+                                    events={eventList}
+                                    eventClick={handleEventClick}
+                                  />
+                                </Grid>
+                                <div className="modals">
+                                  <VolunteerModal
+                                    openEventModal={openEventModal}
+                                    meal={openEventModal.data}
+                                    handleCloseEventModal={
+                                      handleCloseEventModal
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </TabPanel>
+                          </Box>
+                        </Grid>
+                      </Box>
+                    </div>
                   </div>
                 </Grid>
               </Grid>

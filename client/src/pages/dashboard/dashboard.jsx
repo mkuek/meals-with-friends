@@ -46,7 +46,6 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-
       <div className="dashboard">
         <div className="title">My Dashboard</div>
         <div className="dashboardBody">
@@ -59,7 +58,7 @@ const Dashboard = () => {
               <>
                 <div className="list">
                   <div className="left">
-                    {train.data.img === "" ? (
+                    {train.data.img !== "" ? (
                       <img src={train.data.img} alt="meal-train-image" />
                     ) : (
                       <img

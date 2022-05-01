@@ -26,7 +26,7 @@ const style = {
 const InstructionsModal = ({
   trainInfo,
   openInstructionsModal,
-  setOpenModal,
+  setOpenInstructionsModal,
   handleOpenModal,
   handleCloseInstructionsModal,
 }) => {
@@ -61,7 +61,7 @@ const InstructionsModal = ({
                     Meal Train Information
                   </Typography>
                   <CloseIcon
-                    onClick={() => handleCloseInstructionsModal()}
+                    onClick={(e) => setOpenInstructionsModal({ open: false })}
                     sx={{ cursor: "pointer" }}
                   />
                 </Box>
