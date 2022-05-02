@@ -11,11 +11,13 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import Navbar from "../../components/navBar/Navbar";
+import moment from "moment";
+import { Box } from "@mui/system";
 
 const VolunteerMeal = () => {
   const [trainInfo, setTrainInfo] = useState({});
@@ -34,7 +36,12 @@ const VolunteerMeal = () => {
     const querySnapshot = await getDoc(trainListQuery);
     // console.log(querySnapshot.data());
     setTrainInfo(querySnapshot.data());
-    setTitle(querySnapshot.data().individual_meals[mealId].date);
+    setTitle(
+      moment(
+        querySnapshot.data().individual_meals[mealId].date,
+        "YYYY-MM-DD"
+      ).format("MMMM D, YYYY")
+    );
     setMeals(querySnapshot.data().individual_meals);
   };
 
@@ -53,7 +60,7 @@ const VolunteerMeal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     meals[mealId].meal_name = formContents.meal_name;
-    meals[mealId].notes = formContents.notes;
+    meals[mealId].notes = formContents.notes || "";
     meals[mealId].volunteer = userInfo;
     meals[mealId].title = formContents.meal_name;
     try {
@@ -61,7 +68,15 @@ const VolunteerMeal = () => {
         doc(db, "train_info", trainId),
         {
           individual_meals: meals,
+          meal_members: arrayUnion(currentUser.uid),
         }
+      );
+      const addTrainToUser = await updateDoc(
+        doc(db, "users", currentUser.uid),
+        {
+          train_id: arrayUnion(trainId),
+        },
+        { merge: true }
       );
       alert("update success!");
       navigate(`/trains/${trainId}`);
@@ -138,7 +153,7 @@ const VolunteerMeal = () => {
                     component="div"
                     marginTop="0.25rem"
                   >
-                    {trainInfo.meal_delivery_time}
+                    {trainInfo.meal_delivery_time || "Not Specified"}
                   </Typography>
                 </Grid>
                 <Grid item xs>
@@ -154,7 +169,7 @@ const VolunteerMeal = () => {
                     component="div"
                     marginTop="0.25rem"
                   >
-                    {trainInfo.meal_favorites}
+                    {trainInfo.meal_favorites || "Not Specified"}
                   </Typography>
                 </Grid>
                 <Grid item xs>
@@ -170,7 +185,7 @@ const VolunteerMeal = () => {
                     component="div"
                     marginTop="0.25rem"
                   >
-                    {trainInfo.meal_non_favorite}
+                    {trainInfo.meal_non_favorite || "Not Specified"}
                   </Typography>
                 </Grid>
                 <Grid item xs>
@@ -180,6 +195,13 @@ const VolunteerMeal = () => {
                     component="div"
                   >
                     Allergies or dietary restrictions
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    component="div"
+                    marginTop="0.25rem"
+                  >
+                    {trainInfo.meal_allergies || "Not Specified"}
                   </Typography>
                 </Grid>
                 <Grid item xs>
@@ -195,7 +217,7 @@ const VolunteerMeal = () => {
                     component="div"
                     marginTop="0.25rem"
                   >
-                    {trainInfo.meal_instructions}
+                    {trainInfo.meal_instructions || "Not Specified"}
                   </Typography>
                 </Grid>
               </div>
@@ -204,7 +226,7 @@ const VolunteerMeal = () => {
                   <div className="form-header">
                     Please enter a meal description and any notes.
                   </div>
-                  <Grid container spacing={3} justifyContent="flex-end">
+                  <Grid container spacing={3} justifyContent="center">
                     <Grid item xs={9}>
                       <Typography
                         variant="subtitle1"
@@ -253,7 +275,7 @@ const VolunteerMeal = () => {
                     className="nextButton"
                     sx={{ marginTop: "1rem", gap: "1rem" }}
                   >
-                    <Button variant="outlined" onClick={""}>
+                    <Button variant="outlined" onClick={() => navigate(-1)}>
                       <ArrowLeftIcon />
                       Back
                     </Button>
@@ -261,7 +283,15 @@ const VolunteerMeal = () => {
                       Volunteer
                     </Button>
                   </Grid>
-                  {error && <span>Wrong Email or Password!</span>}
+                  <Box
+                    sx={{
+                      color: "red",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {error && <span>Please enter a meal name</span>}
+                  </Box>
                 </form>
               </div>
             </div>

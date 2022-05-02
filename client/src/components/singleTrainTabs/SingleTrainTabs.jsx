@@ -68,10 +68,9 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const SingleTrainTabs = ({ trainInfo }) => {
+const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
   const [parentValue, setParentValue] = useState(0);
   const [innerTabValue, setInnerTabValue] = useState(0);
-  const [eventList, setEventList] = useState([]);
   const [openEventModal, setOpenEventModal] = useState({
     open: false,
     data: "",
@@ -103,31 +102,8 @@ const SingleTrainTabs = ({ trainInfo }) => {
   const handleCloseInstructionsModal = () =>
     setOpenInstructionsModal({ open: false, data: "" });
 
-  useEffect(() => {
-    createEvents();
-  }, [innerTabValue]);
-
-  const trainLength = () => {
-    const dates = [];
-    const startDate = moment(
-      `${trainInfo.meal_date_start[0].year}-${
-        trainInfo.meal_date_start[0].month
-      }-${trainInfo.meal_date_start[0].day - 1}`,
-      "YYYY-M-D"
-    );
-    const endDate = moment(
-      `${trainInfo.meal_date_end[0].year}-${trainInfo.meal_date_end[0].month}-${
-        trainInfo.meal_date_end[0].day + 1
-      }`,
-      "YYYY-M-D"
-    );
-    while (startDate.add(1, "days").diff(endDate) < 0) {
-      dates.push(startDate.clone().toDate());
-    }
-    return dates;
-  };
   const renderList = () => {
-    const dates = trainLength();
+    const dates = trainLength;
     const formatted = [];
     dates.map((date) => {
       formatted.push(moment(date).format("MMMM D YYYY, dddd"));
@@ -205,43 +181,6 @@ const SingleTrainTabs = ({ trainInfo }) => {
         </TableContainer>
       </>
     );
-  };
-
-  const createEvents = async () => {
-    const dates = trainLength();
-    const eventListObject = [];
-    dates.map((date, index) => {
-      eventListObject.push({
-        title: trainInfo.individual_meals[index].title || "Available",
-        date_formatted: moment(date).format("MMMM D YYYY, dddd"),
-        date: moment(date).format("YYYY-MM-DD"),
-        url: `/trains/${trainId}/volunteer/${index}`,
-        volunteer: `${trainInfo.individual_meals[index].volunteer.first_name} ${trainInfo.individual_meals[index].volunteer.last_name}`,
-        meal_name: trainInfo.individual_meals[index].meal_name,
-        notes: trainInfo.individual_meals[index].notes,
-        color:
-          trainInfo.individual_meals[index].title === "Available"
-            ? "#5cb85c"
-            : "#3a87a",
-      });
-    });
-    try {
-      if (trainInfo.individual_meals === "") {
-        const res = await setDoc(
-          doc(db, "train_info", trainId),
-          {
-            individual_meals: eventListObject,
-          },
-          { merge: true }
-        );
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-    setEventList({
-      events: eventListObject,
-    });
-    return eventListObject;
   };
 
   const handleEventClick = (e) => {
@@ -487,9 +426,7 @@ const SingleTrainTabs = ({ trainInfo }) => {
                             </Grid>
                             <TabPanel value={innerTabValue} index={0}>
                               <div className="listview">
-                                {trainInfo.meal_date_start
-                                  ? renderList()
-                                  : "No Events"}
+                                {renderList() || "No Events"}
                               </div>
                             </TabPanel>
                             <TabPanel

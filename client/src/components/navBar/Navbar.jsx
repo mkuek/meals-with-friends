@@ -40,7 +40,10 @@ const Navbar = () => {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => dispatch({ type: "LOGOUT" })}
+                onClick={() => {
+                  dispatch({ type: "LOGOUT" });
+                  navigate("/login");
+                }}
               >
                 Sign Out
               </Button>

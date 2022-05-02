@@ -1,32 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/navBar/Navbar";
 import "./singleTrain.scss";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Badge, Button, Chip, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, Chip, Typography } from "@mui/material";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import EditIcon from "@mui/icons-material/Edit";
-import AddIcon from "@mui/icons-material/Add";
 import { AuthContext } from "../../context/authContext";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SingleTrainTabs from "../../components/singleTrainTabs/SingleTrainTabs";
 import AddPhotoModal from "../../components/addPhotoModal/AddPhotoModal";
+import moment from "moment";
 
 const SingleTrain = () => {
-  const [trainInfo, setTrainInfo] = useState({ meal_members: "0" });
+  const [trainInfo, setTrainInfo] = useState({});
+  const [memberNum, setMemberNum] = useState("");
   const [userInfo, setUserInfo] = useState([]);
+  const [organizer, setOrganizer] = useState([]);
+  const [trainLength, setTrainLength] = useState([]);
   const [openPhotoModal, setOpenPhotoModal] = useState({
     open: false,
     data: "",
   });
+  const [eventList, setEventList] = useState([]);
 
   const navigate = useNavigate();
   const { trainId } = useParams();
@@ -35,13 +32,25 @@ const SingleTrain = () => {
   const getData = async () => {
     const trainListQuery = doc(db, "train_info", trainId);
     const querySnapshot = await getDoc(trainListQuery);
-    setTrainInfo(querySnapshot.data());
+    if (querySnapshot.exists()) {
+      setTrainInfo(querySnapshot.data());
+      setMemberNum(querySnapshot.data().meal_members.length);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
   };
 
   const getUserData = async () => {
     const userQuery = doc(db, "users", currentUser.uid);
     const querySnapshot = await getDoc(userQuery);
     setUserInfo(querySnapshot.data());
+  };
+
+  const getOrganizer = async () => {
+    const organizerQuery = doc(db, "users", trainInfo.created_by);
+    const querySnapshot = await getDoc(organizerQuery);
+    setOrganizer(querySnapshot.data());
   };
 
   const handleOpenPhotoModal = (data) =>
@@ -52,8 +61,76 @@ const SingleTrain = () => {
   useEffect(() => {
     getData();
     getUserData();
-  }, []);
+  }, [trainInfo.img]);
+  useEffect(() => {
+    createEvents(trainInfo);
+    getOrganizer();
+  }, [trainInfo]);
+  const createEvents = async (trainInfo) => {
+    const dates = [];
+    const startDate =
+      moment(
+        `${trainInfo.meal_date_start[0].year}-${
+          trainInfo.meal_date_start[0].month
+        }-${trainInfo.meal_date_start[0].day - 1}`,
+        "YYYY-M-D"
+      ) || moment().format("YYYY-M-D");
+    const endDate =
+      moment(
+        `${trainInfo.meal_date_end[0].year}-${
+          trainInfo.meal_date_end[0].month
+        }-${trainInfo.meal_date_end[0].day + 1}`,
+        "YYYY-M-D"
+      ) || moment().format("YYYY-M-D");
+    while (startDate.add(1, "days").diff(endDate) < 0) {
+      dates.push(startDate.clone().toDate());
+    }
+    setTrainLength(dates);
+    const eventListObject = [];
 
+    try {
+      dates.map((date, index) => {
+        eventListObject.push({
+          title: trainInfo.individual_meals[index].title || "Available",
+          date_formatted: moment(date).format("MMMM D YYYY, dddd"),
+          date: moment(date).format("YYYY-MM-DD"),
+          url: `/trains/${trainId}/volunteer/${index}`,
+          volunteer: `${trainInfo.individual_meals[index].volunteer.first_name} ${trainInfo.individual_meals[index].volunteer.last_name}`,
+          meal_name: trainInfo.individual_meals[index].meal_name,
+          notes: trainInfo.individual_meals[index].notes,
+          color:
+            trainInfo.individual_meals[index].title === "Available"
+              ? "#5cb85c"
+              : "#3a87a",
+        });
+      });
+    } catch (error) {
+      dates.map((date, index) => {
+        eventListObject.push({
+          title: "Available",
+          date_formatted: moment(date).format("MMMM D YYYY, dddd"),
+          date: moment(date).format("YYYY-MM-DD"),
+          url: `/trains/${trainId}/volunteer/${index}`,
+          volunteer: "",
+          meal_name: "",
+          notes: "",
+          color: "#5cb85c",
+        });
+      });
+      const res = await setDoc(
+        doc(db, "train_info", trainId),
+        {
+          individual_meals: eventListObject,
+        },
+        { merge: true }
+      );
+    }
+
+    setEventList({
+      events: eventListObject,
+    });
+    return eventListObject;
+  };
   return (
     <>
       <Navbar />
@@ -69,18 +146,22 @@ const SingleTrain = () => {
               </Typography>
             </div>
             <div className="title-right">
-              <Button variant="contained" size="small">
-                <ForumOutlinedIcon fontSize="small" />
-                Post an Update
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => navigate(`/trains/${trainId}/edit`)}
-              >
-                <EditIcon fontSize="small" />
-                Make Changes
-              </Button>
+              {trainInfo.created_by === currentUser.uid && (
+                <>
+                  <Button variant="contained" size="small">
+                    <ForumOutlinedIcon fontSize="small" />
+                    Post an Update
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => navigate(`/trains/${trainId}/edit`)}
+                  >
+                    <EditIcon fontSize="small" />
+                    Make Changes
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           <div className="body">
@@ -124,7 +205,7 @@ const SingleTrain = () => {
                   Organizer
                 </Typography>
                 <Typography variant="subtitle1" component="div" color="#337ab7">
-                  {`${userInfo.first_name} ${userInfo.last_name}`}
+                  {`${organizer.first_name} ${organizer.last_name}`}
                 </Typography>
                 <Typography
                   variant="subtitle1"
@@ -138,11 +219,7 @@ const SingleTrain = () => {
                 </Typography>
                 <Typography variant="subtitle1" component="div" color="#337ab7">
                   Number of Participants:
-                  <Chip
-                    color="primary"
-                    size="small"
-                    label={trainInfo ? trainInfo.meal_members.length : "none"}
-                  />
+                  <Chip color="primary" size="small" label={memberNum} />
                 </Typography>
                 <Button variant="contained" size="small">
                   Share
@@ -189,7 +266,13 @@ const SingleTrain = () => {
                 />
               </div>
               <div className="body">
-                <SingleTrainTabs trainInfo={trainInfo} />
+                {trainInfo && (
+                  <SingleTrainTabs
+                    trainInfo={trainInfo}
+                    trainLength={trainLength}
+                    eventList={eventList}
+                  />
+                )}
               </div>
             </div>
           </div>

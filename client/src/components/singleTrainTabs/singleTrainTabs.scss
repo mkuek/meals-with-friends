@@ -22,6 +22,9 @@
     .MuiButton-root {
       background-color: #5cb85c;
       color: #fff;
+      &:hover {
+        background-color: #50a050;
+      }
     }
   }
   .MuiTableRow-root:nth-child(even) {

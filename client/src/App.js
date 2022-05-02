@@ -10,6 +10,7 @@ import { AuthContext } from "./context/authContext";
 import CreateTrain from "./pages/createTrain/CreateTrain";
 import VolunteerMeal from "./pages/VolunteerMeal/VolunteerMeal";
 import EditMeal from "./pages/editMeal/EditMeal";
+import TrainUpdates from "./pages/trainUpdates/TrainUpdates";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -22,6 +23,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="trains">
+            <Route path=":trainId/updates/new" element={<TrainUpdates />} />
             <Route
               path=":trainId/volunteer/:mealId"
               element={<VolunteerMeal />}

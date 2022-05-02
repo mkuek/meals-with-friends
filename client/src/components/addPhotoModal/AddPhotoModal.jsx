@@ -9,8 +9,8 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { db, storage } from "../../firebase";
-import { arrayUnion, doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { doc, updateDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
 const style = {
@@ -30,10 +30,8 @@ const style = {
   alignItems: "center",
 };
 const AddPhotoModal = ({
-  title,
   trainInfo,
   openPhotoModal,
-  setOpenModal,
   handleOpenPhotoModal,
   handleClosePhotoModal,
 }) => {
@@ -82,13 +80,9 @@ const AddPhotoModal = ({
   const handleSubmit = async (e) => {
     console.log(trainInfo);
     try {
-      const addImgToTrain = await setDoc(
-        doc(db, "train_info", trainId),
-        {
-          img: arrayUnion(data.img),
-        },
-        { merge: true }
-      );
+      const addImgToTrain = await updateDoc(doc(db, "train_info", trainId), {
+        img: data.img,
+      });
       handleClosePhotoModal();
     } catch (error) {
       console.log(error.message);
@@ -154,6 +148,7 @@ const AddPhotoModal = ({
               height: "100%",
               justifyContent: "space-between",
               gap: "1rem",
+              overflow: "hidden",
             }}
           >
             <Box
@@ -167,9 +162,28 @@ const AddPhotoModal = ({
                 margin: "auto",
                 justifyContent: "center",
                 alignItems: "center",
+                overflow: "hidden",
               }}
             >
-              <InsertPhotoOutlinedIcon />
+              {file ? (
+                <Box
+                  sx={{
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <img
+                    src={data.img}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  ></img>
+                </Box>
+              ) : (
+                <InsertPhotoOutlinedIcon />
+              )}
             </Box>
             <form action="">
               <input

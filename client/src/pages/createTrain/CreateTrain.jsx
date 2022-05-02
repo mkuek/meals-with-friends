@@ -30,6 +30,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AuthContext } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,8 +81,9 @@ const CreateTrain = () => {
     meal_allergy: "",
     meal_members: "",
     img: "",
+    individual_meals: [],
   });
-
+  const navigate = useNavigate();
   const handleFormInputs = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -112,7 +114,7 @@ const CreateTrain = () => {
         ...formContents,
         created_time: serverTimestamp(),
         created_by: currentUser.uid,
-        meal_members: currentUser.uid,
+        meal_members: [currentUser.uid],
       });
       const addUserToTrain = await setDoc(
         doc(db, "users", currentUser.uid),
@@ -442,7 +444,13 @@ const CreateTrain = () => {
                       <ArrowLeftIcon />
                       Back
                     </Button>
-                    <Button variant="contained" onClick={handleSubmit}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleSubmit();
+                        navigate("/dashboard");
+                      }}
+                    >
                       Finish Setup
                     </Button>
                   </Grid>

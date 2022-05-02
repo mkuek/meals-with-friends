@@ -105,7 +105,7 @@ const Register = () => {
               <TextField
                 onChange={handleFormInputs}
                 variant="standard"
-                type="text"
+                type="password"
                 id="password"
                 name="password"
                 placeholder="Password"
