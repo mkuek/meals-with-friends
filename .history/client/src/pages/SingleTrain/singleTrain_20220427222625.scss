@@ -1,0 +1,192 @@
+.singleTrain {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    justify-content: space-between;
+    margin: auto;
+    width: 95%;
+    background-color: #01467f;
+
+    .title-left {
+      padding: 1rem;
+
+      .MuiTypography-h6 {
+        color: #f08b1d;
+      }
+
+      .MuiTypography-h4 {
+        color: #ffffff;
+      }
+    }
+
+    .title-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 20%;
+      padding: 1rem;
+
+      .MuiButton-root {
+        gap: 0.25rem;
+        background-color: #ffffff;
+        color: black;
+      }
+    }
+  }
+
+  .body {
+    display: flex;
+    margin: auto;
+    padding: 1rem;
+    width: 95%;
+    height: 75%;
+    gap: 1.5rem;
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      flex: 4;
+      justify-content: space-evenly;
+      height: 75vh;
+      gap: 1rem;
+
+      .photo,
+      .donate {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex: 3;
+        border: 1px solid #bdbdbd90;
+        border-radius: 5px;
+        background-color: #c9c9c9;
+        -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        gap: 1rem;
+
+        .MuiButton-root {
+          width: 70%;
+          margin-left: auto;
+          margin-right: auto;
+          align-items: center;
+        }
+        .MuiTypography-subtitle1 {
+          width: 70%;
+          margin-left: auto;
+          margin-right: auto;
+          color: #ffffff;
+          text-align: center;
+        }
+      }
+      .organize {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        justify-content: center;
+        align-items: flex-start;
+        flex: 3;
+        border: 1px solid #bdbdbd90;
+        border-radius: 5px;
+        background-color: #ffffff;
+        -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+        .MuiTypography-subtitle1 {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .MuiChip-root {
+          display: flex;
+          width: 30px;
+          align-items: center;
+          font-weight: bold;
+        }
+
+        .MuiButton-root {
+          display: flex;
+          align-items: flex-end;
+          margin-top: 1.5rem;
+          width: 100%;
+          background-color: #f08b1d;
+          color: #fff;
+        }
+      }
+      .donate {
+        flex: 2;
+      }
+      .gift-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        justify-content: flex-start;
+        align-items: center;
+        flex: 3;
+        border: 1px solid #bdbdbd90;
+        border-radius: 5px;
+        background-color: #ffffff;
+        -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+        .MuiButton-root {
+          display: flex;
+          align-items: flex-end;
+          width: 100%;
+          background-color: #6c757d;
+          color: #fff;
+        }
+      }
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      flex: 8;
+      border: 1px solid black;
+
+      .header {
+        flex: 1;
+      }
+
+      .about {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        align-items: flex-start;
+
+        .about-empty {
+          display: flex;
+          flex-direction: column;
+          padding: 1rem;
+          justify-content: center;
+          align-items: center;
+          flex: 3;
+          border: 1px solid #bdbdbd90;
+          border-radius: 5px;
+          color: #ffffff;
+          background-color: #c9c9c9;
+          -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+          box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+          gap: 1rem;
+
+          .MuiButton-root {
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            gap: 0.25rem;
+          }
+        }
+      }
+
+      .body {
+        flex: 7;
+        justify-content: center;
+      }
+    }
+  }
+}

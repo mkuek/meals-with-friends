@@ -1,0 +1,50 @@
+import React, { useState } from "react";
+import Navbar from "../../components/navBar/Navbar";
+import {
+  Button,
+  FormLabel,
+  Grid,
+  Paper,
+  styled,
+  TextField,
+} from "@mui/material";
+import "./dashboard.scss";
+
+const Dashboard = () => {
+  return (
+    <>
+      <Navbar />
+      <div className="dashboard">
+        <div className="title">My Dashboard</div>
+        <div className="dashboardBody">
+          <p>
+            Below is a list of all of the events you have created or have been
+            invited to participate in.
+          </p>
+          <Grid container spacing={1}>
+            <Grid item xs={4}>
+              one
+            </Grid>
+            <Grid item xs={4}>
+              two{" "}
+            </Grid>
+            <Grid item xs={4}>
+              three{" "}
+            </Grid>
+            <Grid item xs={12}>
+              four{" "}
+            </Grid>
+          </Grid>
+          <Button className="signInButton" variant="contained" type="submit">
+            Create User Account
+          </Button>
+          <div className="signIn">
+            Used Meal Train before? <a href="/login">Sign In</a>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Dashboard;

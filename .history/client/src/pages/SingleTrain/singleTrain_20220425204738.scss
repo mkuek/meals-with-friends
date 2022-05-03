@@ -1,0 +1,11 @@
+.singleTrain {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    margin: auto;
+    padding: 18px;
+    width: 95%;
+    background-color: #01467f;
+  }
+}

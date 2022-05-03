@@ -1,0 +1,55 @@
+.trainForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 0;
+  -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+  .nextButton {
+    justify-content: flex-end;
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+  #simple-tabpanel-1 {
+    width: 100%;
+  }
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      display: flex;
+      align-items: center;
+      border: 1px solid #bce8f1;
+      background-color: #d9edf7;
+      color: #31708f;
+      width: 95%;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 0;
+      font-size: 14px;
+    }
+  }
+}
+
+.title {
+  display: flex;
+  font-size: 36px;
+  justify-content: flex-start;
+  width: 75%;
+  margin: auto;
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+}

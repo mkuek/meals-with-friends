@@ -1,0 +1,21 @@
+.singleTrain {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    margin: auto;
+    padding: 18px;
+    width: 90%;
+    background-color: #01467f;
+
+    .title-left {
+      .MuiTypography-h6 {
+        color: #f08b1d;
+      }
+
+      .MuiTypography-h4 {
+        color: #ffffff;
+      }
+    }
+  }
+}

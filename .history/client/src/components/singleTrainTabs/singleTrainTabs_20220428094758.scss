@@ -1,0 +1,27 @@
+.about {
+  .MuiBox-root {
+    padding: 0;
+  }
+  .about-body {
+    width: 100%;
+    gap: 1rem;
+  }
+  .about-empty {
+    display: flex;
+    justify-content: start;
+  }
+  .MuiButton-root {
+    background-color: #ffd400;
+    color: #333;
+  }
+  .MuiTableRow-root:nth-child(even) {
+    background-color: #f5f5f5;
+  }
+}
+.calendar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}

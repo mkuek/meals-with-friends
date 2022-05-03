@@ -1,0 +1,25 @@
+.trainForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 1rem;
+
+  form {
+    .nextButton {
+      align-self: end;
+    }
+  }
+
+  .title {
+    font-size: 36px;
+    margin-bottom: 1rem;
+    align-self: start;
+  }
+}

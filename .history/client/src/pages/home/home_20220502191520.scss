@@ -1,0 +1,16 @@
+.home {
+  height: 100%;
+  .hero {
+    background-color: #a6ce39;
+    img {
+      background-color: transparent;
+    }
+  }
+
+  .body {
+    padding: 2rem;
+    margin-top: 3rem;
+    height: 100vh;
+    width: 50%;
+  }
+}

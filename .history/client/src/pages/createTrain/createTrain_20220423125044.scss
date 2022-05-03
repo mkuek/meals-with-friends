@@ -1,0 +1,19 @@
+.trainForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5rem;
+
+  Box {
+    display: flex;
+  }
+
+  .title {
+    font-size: 36px;
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,47 @@
+.volunteer {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    justify-content: space-between;
+    margin: auto;
+    width: 95%;
+    background-color: #01467f;
+
+    .title-left {
+      padding: 1rem;
+
+      .MuiTypography-h6 {
+        color: #f08b1d;
+      }
+
+      .MuiTypography-h4 {
+        color: #ffffff;
+      }
+    }
+
+    .title-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 20%;
+      padding: 1rem;
+
+      .MuiButton-root {
+        gap: 0.25rem;
+        background-color: #ffffff;
+        color: black;
+      }
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 1rem;
+    width: 95%;
+    height: 75%;
+    gap: 1.5rem;
+  }
+}

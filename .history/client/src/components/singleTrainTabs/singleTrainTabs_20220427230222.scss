@@ -1,0 +1,33 @@
+.about {
+  .about-body {
+    width: 100%;
+    gap: 1rem;
+  }
+  .about-empty {
+    display: flex;
+    justify-content: start;
+  }
+  .muiTabs-root {
+    padding: 0;
+  }
+}
+.calendar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    display: flex;
+    align-items: center;
+    border: 1px solid #bce8f1;
+    background-color: #d9edf7;
+    color: #31708f;
+    width: 95%;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 0;
+    font-size: 14px;
+  }
+}

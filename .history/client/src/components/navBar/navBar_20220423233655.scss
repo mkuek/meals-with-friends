@@ -1,0 +1,10 @@
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .newTrain {
+    font-weight: bold;
+    background-color: gray;
+  }
+}

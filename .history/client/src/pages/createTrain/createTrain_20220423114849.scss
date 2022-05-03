@@ -1,0 +1,16 @@
+.trainForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+
+  Box {
+    display: flex;
+  }
+
+  .title {
+    font-weight: bold;
+    font-size: 36px;
+  }
+}

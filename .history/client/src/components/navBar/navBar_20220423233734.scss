@@ -1,0 +1,12 @@
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .newTrain {
+    font-weight: bold;
+    &:hover {
+      background-color: rgb(208, 208, 208);
+    }
+  }
+}
