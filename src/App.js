@@ -38,7 +38,7 @@ function App() {
             <Route path=":trainId" element={<SingleTrain />}></Route>
             <Route path="create" element={<CreateTrain />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Route>
       </Routes>
     </Router>

@@ -1,70 +1,163 @@
-# Getting Started with Create React App
+<div id="top"></div>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/mkuek/meals-with-friends">
+    <img src="https://github.com/othneildrew/Best-README-Template/raw/master/images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-## Available Scripts
+<h3 align="center">project_title</h3>
 
-In the project directory, you can run:
+  <p align="center">
+    project_description
+    <br />
+    <a href="https://meals-with-friends.netlify.app/">View Demo</a>
+  </p>
+</div>
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
-### `npm start`
+<div align="center"> 
+  <img src="./readMeImages/overview.png" alt="screenshot" />
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Built With
 
-### `npm test`
+- [React.js](https://reactjs.org/)
+- [Material UI](https://mui.com)
+- [React-Router](https://reactrouter.com)
+- [Firebase](https://firebase.google.com/)
+- [Sass](https://sass-lang.com/)
+- [Moment](https://momentjs.com)
+- [FullCalendar](https://fullcalendar.io/)
+- [React-Modern-Calendar-Datepicker](https://kiarash-z.github.io/react-modern-calendar-datepicker/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-### `npm run build`
+<!-- USAGE EXAMPLES -->
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Features
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Meals with Friends is based upon a popular meal-planning application, MealTrain. The site allows people plan and prepare meals for friends or family in the event where they otherwise could not, such as after having a child, having major surgery, or other extended illnesses. Meals are planned for a particular date range, and users can volunteer for specific days to bring a meal. Meal information is displayed in an accessible format for all interested participants.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Login/Registration handled through Firebase Authentication and Context API
+<br/>
+<img src="./readMeImages/login.png"/>
+<br/>
 
-### `npm run eject`
+Meals are created via tabbed form
+<br/>
+<img src="./readMeImages/create.png"/>
+<br/>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Dashboard displays all meal trains the logged in user is participating in.
+<br/>
+<img src="./readMeImages/dashboard.png"/>
+<br/>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Dashboard displays all meal trains the logged in user is participating in.
+<br/>
+<img src="./readMeImages/dashboard.png"/>
+<br/>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Individual train information is displayed. Users can volunteer for a particular day usingg the calendar picker. Authenticated meal organizers are allowed to add updates, edit the train information, and meal information.
+<br/>
+<img src="./readMeImages/overview.png"/>
+<br/>
+<img src="./readMeImages/calendar.png"/>
+<br/>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Volunteer page
+<br/>
+<img src="./readMeImages/volunteer.png"/>
+<br/>
 
-## Learn More
+Edit page
+<br/>
+<img src="./readMeImages/edit.png"/>
+<br/>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Update page
+<br/>
+<img src="./readMeImages/updates.png"/>
+<br/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+A photo for the train page can be added
+<br/>
+<img src="./readMeImages/addPhotos.png"/>
+<br/>
 
-### Code Splitting
+Meal information modal can be accessed from the calendar picker
+<br/>
+<img src="./readMeImages/viewmeal.png"/>
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-### Analyzing the Bundle Size
+<!-- ROADMAP -->
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Roadmap
 
-### Making a Progressive Web App
+- [ ] Encrypt user passwords securely
+- [ ] Form validation
+- [ ] Add donation functionality
+- [ ] Allow users to view all participants
+- [ ] Send reminder emails
+- [ ] Add messaging capabilities
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
-### Advanced Configuration
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+<!-- CONTRIBUTING -->
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-### `npm run build` fails to minify
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- CONTACT -->
+
+## Contact
+
+Michael Kuek - mkuek123@gmail.com
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+
+## Acknowledgments
+
+- This project was made possible by[MealTrain](https://www.mealtrain.com/)
+- []()
+- []()
+
+<p align="right">(<a href="#top">back to top</a>)</p>
