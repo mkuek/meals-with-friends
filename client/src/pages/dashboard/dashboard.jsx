@@ -5,14 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./dashboard.scss";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { AuthContext } from "../../context/authContext";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -86,19 +79,25 @@ const Dashboard = () => {
                       <SearchIcon fontSize="small" />
                       Open
                     </Button>
-                    <Button variant="outlined" size="small">
-                      {train.data.created_by == currentUser.uid ? (
-                        <>
+                    {train.data.created_by == currentUser.uid ? (
+                      <>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={() => navigate(`/trains/${train.id}/edit`)}
+                        >
                           <EditIcon fontSize="small" />
                           Make Changes
-                        </>
-                      ) : (
-                        <>
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="outlined" size="small">
                           <DeleteIcon fontSize="small" />
                           Remove Me
-                        </>
-                      )}
-                    </Button>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
                 <Divider style={{ width: "100%" }} />

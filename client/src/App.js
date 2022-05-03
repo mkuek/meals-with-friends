@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/home/home";
+import Home from "./pages/home/Home";
 import Login from "./pages/login/login";
 import SingleTrain from "./pages/SingleTrain/singleTrain";
 import Dashboard from "./pages/dashboard/dashboard";
@@ -11,6 +11,7 @@ import CreateTrain from "./pages/createTrain/CreateTrain";
 import VolunteerMeal from "./pages/VolunteerMeal/VolunteerMeal";
 import EditMeal from "./pages/editMeal/EditMeal";
 import TrainUpdates from "./pages/trainUpdates/TrainUpdates";
+import EditVolunteer from "./pages/editVolunteer/EditVolunteer";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -24,6 +25,10 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="trains">
             <Route path=":trainId/updates/new" element={<TrainUpdates />} />
+            <Route
+              path=":trainId/volunteer/:mealId/edit"
+              element={<EditVolunteer />}
+            />
             <Route
               path=":trainId/volunteer/:mealId"
               element={<VolunteerMeal />}

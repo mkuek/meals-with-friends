@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import "./editMeal.scss";
 import {
@@ -6,49 +6,28 @@ import {
   FormLabel,
   Grid,
   TextField,
-  Checkbox,
-  FormGroup,
-  FormControlLabel,
   MenuItem,
   Select,
   Divider,
   Box,
-  Table,
 } from "@mui/material";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../../context/authContext";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import Navbar from "../../components/navBar/Navbar";
 import CheckIcon from "@mui/icons-material/Check";
 
 const EditMeal = () => {
   const [trainInfo, setTrainInfo] = useState({});
-  const [formContents, setFormContents] = useState({
-    meal_recipient: trainInfo.meal_recipient,
-    email: trainInfo.email,
-    address: trainInfo.address,
-    city: trainInfo.city,
-    state: trainInfo.state,
-    zipcode: trainInfo.zipcode,
-    phone: trainInfo.phone,
-    train_description: trainInfo.train_description,
-    meal_adults: trainInfo.meal_adults,
-    meal_kids: trainInfo.meal_kids,
-    meal_delivery_time: trainInfo.meal_delivery_time,
-    meal_instructions: trainInfo.meal_instructions,
-    meal_favorites: trainInfo.meal_favorites,
-    meal_non_favorite: trainInfo.meal_non_favorite,
-    meal_allergy: trainInfo.meal_allergy,
-  });
 
   const navigate = useNavigate();
+
   const { trainId } = useParams();
+
   const getData = async () => {
     const trainListQuery = doc(db, "train_info", trainId);
     const querySnapshot = await getDoc(trainListQuery);
-    // console.log(querySnapshot.data());
     setTrainInfo(querySnapshot.data());
   };
 
@@ -67,14 +46,18 @@ const EditMeal = () => {
 
   const handleSubmit = async (e) => {
     try {
-      const addIndividualMeal = await setDoc(doc(db, "train_info", trainId), {
-        trainInfo,
-      });
+      console.log(trainInfo);
+      const addIndividualMeal = await setDoc(
+        doc(db, "train_info", trainId),
+        {
+          ...trainInfo,
+        },
+        { merge: true }
+      );
       alert("update success!");
       navigate(`/trains/${trainId}`);
     } catch (error) {
       console.log(error.message);
-      // ..
     }
   };
   return (

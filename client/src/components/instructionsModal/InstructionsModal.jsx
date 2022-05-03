@@ -27,7 +27,6 @@ const InstructionsModal = ({
   trainInfo,
   openInstructionsModal,
   setOpenInstructionsModal,
-  handleOpenModal,
   handleCloseInstructionsModal,
 }) => {
   return (

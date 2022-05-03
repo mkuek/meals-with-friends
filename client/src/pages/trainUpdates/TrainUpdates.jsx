@@ -15,7 +15,7 @@ import {
   Box,
   Table,
 } from "@mui/material";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -26,6 +26,8 @@ import moment from "moment";
 
 const TrainUpdates = () => {
   const [trainInfo, setTrainInfo] = useState({});
+  const [userInfo, setUserInfo] = useState([]);
+
   const [formContents, setFormContents] = useState({
     update_title: "",
     update_text: "",
@@ -33,6 +35,7 @@ const TrainUpdates = () => {
 
   const navigate = useNavigate();
   const { trainId } = useParams();
+  const { currentUser } = useContext(AuthContext);
 
   const getData = async () => {
     const trainListQuery = doc(db, "train_info", trainId);
@@ -41,17 +44,44 @@ const TrainUpdates = () => {
     setTrainInfo(querySnapshot.data());
   };
 
+  const getUserData = async () => {
+    const userQuery = doc(db, "users", currentUser.uid);
+    const querySnapshot = await getDoc(userQuery);
+    // console.log(querySnapshot.data());
+    setUserInfo(querySnapshot.data());
+  };
+
   useEffect(() => {
     getData();
+    getUserData();
   }, []);
 
   const handleFormInputs = (event) => {
     const name = event.target.name;
     const value = event.target.value;
+    const timestamp = moment().format();
     setFormContents({
       ...formContents,
       [name]: value,
+      posted: timestamp,
+      author: `${userInfo.first_name || ""} ${userInfo.last_name || ""}`,
     });
+  };
+
+  const handleSubmit = async (event) => {
+    try {
+      const addUpdate = await updateDoc(
+        doc(db, "train_info", trainId),
+        {
+          updates: arrayUnion(formContents),
+        },
+        { merge: true }
+      );
+      alert("update success!");
+      navigate(`/trains/${trainId}`);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <>
@@ -69,8 +99,8 @@ const TrainUpdates = () => {
         </div>
         <div className="body">
           <div>
-            <Grid container spacing={1}>
-              <Grid item xs sx={{ height: "100px" }}>
+            <Grid container spacing={2}>
+              <Grid item xs>
                 <Typography variant="h4" component="div">
                   Update
                 </Typography>
@@ -82,6 +112,7 @@ const TrainUpdates = () => {
                     position: "sticky",
                     top: "100px",
                     left: "100px",
+                    marginTop: "0.5rem",
                   }}
                 >
                   <Button
@@ -105,9 +136,10 @@ const TrainUpdates = () => {
                       padding: "0.5rem",
                       "&:hover": { backgroundColor: "#50a050" },
                     }}
+                    onClick={handleSubmit}
                   >
                     <CheckIcon />
-                    Save Changes
+                    Post Update
                   </Button>
                 </Box>
               </Grid>
@@ -123,55 +155,57 @@ const TrainUpdates = () => {
                   boxShadow: 2,
                 }}
               >
-                <Grid item xs={12} className="form-header">
-                  <Typography
-                    variant="subtitle1"
-                    component="div"
-                    fontWeight="bold"
-                  >
-                    Your friends want to hear from you
-                  </Typography>
-                  <Typography variant="body" component="div">
-                    Use the Updates tab to share updates and photos as they
-                    occur. Start your post by adding a catchy title below.
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sx={{ marginBottom: "1rem" }}>
-                  <Typography
-                    variant="subtitle1"
-                    component="div"
-                    fontWeight="bold"
-                  >
-                    Date Posted
-                  </Typography>
-                  <Typography variant="body" component="div">
-                    {moment().format("MMMM D, YYYY")}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sx={{ marginBottom: "1rem" }}>
-                  <FormLabel htmlFor="update_title">Title</FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    variant="standard"
-                    type="text"
-                    id="update_title"
-                    name="update_title"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabel htmlFor="update_text">Text</FormLabel>
-                  <TextField
-                    onChange={handleFormInputs}
-                    variant="outlined"
-                    type="text"
-                    id="update_text"
-                    name="update_text"
-                    fullWidth
-                    multiline
-                    rows={4}
-                  />
-                </Grid>
+                <Box sx={{ width: "75%", margin: "auto" }}>
+                  <Grid item xs={12} className="form-header">
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      fontWeight="bold"
+                    >
+                      Your friends want to hear from you
+                    </Typography>
+                    <Typography variant="body" component="div">
+                      Use the Updates tab to share updates and photos as they
+                      occur. Start your post by adding a catchy title below.
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sx={{ marginBottom: "1rem" }}>
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      fontWeight="bold"
+                    >
+                      Date Posted
+                    </Typography>
+                    <Typography variant="body" component="div">
+                      {moment().format("MMMM D, YYYY")}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sx={{ marginBottom: "1rem" }}>
+                    <FormLabel htmlFor="update_title">Title</FormLabel>
+                    <TextField
+                      onChange={handleFormInputs}
+                      variant="standard"
+                      type="text"
+                      id="update_title"
+                      name="update_title"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormLabel htmlFor="update_text">Text</FormLabel>
+                    <TextField
+                      onChange={handleFormInputs}
+                      variant="outlined"
+                      type="text"
+                      id="update_text"
+                      name="update_text"
+                      fullWidth
+                      multiline
+                      rows={4}
+                    />
+                  </Grid>
+                </Box>
               </Grid>
             </Grid>
           </div>

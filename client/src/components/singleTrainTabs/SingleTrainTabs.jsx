@@ -4,38 +4,24 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 import "./singleTrainTabs.scss";
 import {
   Button,
-  FormLabel,
   Grid,
-  MenuItem,
-  Select,
-  TextField,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
-  modalClasses,
+  Chip,
+  Slide,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Calendar } from "@hassanmojab/react-modern-calendar-datepicker";
-import {
-  addDoc,
-  arrayUnion,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../../firebase";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -55,7 +41,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, height: "100%" }}>
           <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
@@ -126,14 +112,19 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
                     {trainInfo.individual_meals[index].title === "Available" ? (
                       <>
                         <Grid item xs>
-                          <Typography
-                            variant="subtitle1"
-                            component="div"
-                            fontWeight="bold"
-                            sx={{ color: "#3c763d" }}
+                          <Link
+                            underline="hover"
+                            href={`/trains/${trainId}/volunteer/${index}`}
                           >
-                            This date is available
-                          </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              component="div"
+                              fontWeight="bold"
+                              sx={{ color: "#3c763d" }}
+                            >
+                              This date is available
+                            </Typography>
+                          </Link>
                         </Grid>
                       </>
                     ) : (
@@ -201,7 +192,13 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
         padding="0"
       >
         <Box sx={{ width: "100%" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: "divider",
+              width: "100%",
+            }}
+          >
             <Tabs
               value={parentValue}
               onChange={handleChangeParent}
@@ -210,7 +207,21 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
               centered
             >
               <Tab label="Calendar" />
-              <Tab label="Updates" />
+              <Tab
+                label={
+                  <div>
+                    Updates
+                    {trainInfo.updates && trainInfo.updates.length > 0 && (
+                      <Chip
+                        color="primary"
+                        size="small"
+                        label={trainInfo.updates.length}
+                        sx={{ marginLeft: "0.25rem" }}
+                      />
+                    )}
+                  </div>
+                }
+              />
               <Tab label="Donations" />
             </Tabs>
           </Box>
@@ -377,7 +388,7 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
                                   <Tabs
                                     value={innerTabValue}
                                     onChange={handleChangeInner}
-                                    aria-label="basic tabs example"
+                                    aria-label="event calendar tabs"
                                     variant="fullWidth"
                                     centered
                                   >
@@ -425,39 +436,45 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
                               </Grid>
                             </Grid>
                             <TabPanel value={innerTabValue} index={0}>
-                              <div className="listview">
-                                {renderList() || "No Events"}
-                              </div>
+                              <Slide in={true} direction="left">
+                                <div className="listview">
+                                  {renderList() || "No Events"}
+                                </div>
+                              </Slide>
                             </TabPanel>
+
                             <TabPanel
                               value={innerTabValue}
                               index={1}
                               sx={{ width: "100%" }}
                             >
-                              <div className="calendar">
-                                <Grid
-                                  container
-                                  className="calendar"
-                                  width="100%"
-                                  height="100%"
-                                >
-                                  <FullCalendar
-                                    plugins={[dayGridPlugin]}
-                                    initialView="dayGridMonth"
-                                    events={eventList}
-                                    eventClick={handleEventClick}
-                                  />
-                                </Grid>
-                                <div className="modals">
-                                  <VolunteerModal
-                                    openEventModal={openEventModal}
-                                    meal={openEventModal.data}
-                                    handleCloseEventModal={
-                                      handleCloseEventModal
-                                    }
-                                  />
+                              <Slide in={true} direction="left">
+                                <div className="calendar">
+                                  <Grid
+                                    container
+                                    className="calendar"
+                                    width="100%"
+                                    height="100%"
+                                  >
+                                    <FullCalendar
+                                      plugins={[dayGridPlugin]}
+                                      initialView="dayGridMonth"
+                                      events={eventList}
+                                      eventClick={handleEventClick}
+                                    />
+                                  </Grid>
+                                  <div className="modals">
+                                    <VolunteerModal
+                                      openEventModal={openEventModal}
+                                      meal={openEventModal.data}
+                                      trainInfo={trainInfo}
+                                      handleCloseEventModal={
+                                        handleCloseEventModal
+                                      }
+                                    />
+                                  </div>
                                 </div>
-                              </div>
+                              </Slide>
                             </TabPanel>
                           </Box>
                         </Grid>
@@ -468,8 +485,114 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
               </Grid>
             </div>
           </TabPanel>
-          <TabPanel value={parentValue} index={1}>
-            empty
+          <TabPanel value={parentValue} index={1} sx={{ height: "100%" }}>
+            <Grid
+              container
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
+              <div className="about">
+                {trainInfo.created_by === currentUser.uid && (
+                  <Grid
+                    item
+                    xs
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: "#c9c9c9",
+                      border: "1px solid rgba(189, 189, 189, 0.5647058824)",
+                      borderRadius: "5px",
+                      height: "100%",
+                      marginBottom: "2rem",
+                      paddingTop: "1rem",
+                      paddingBottom: "1rem",
+                      gap: "0.25rem",
+                    }}
+                    className="update"
+                  >
+                    <Button
+                      variant="contained"
+                      onClick={() => navigate(`/trains/${trainId}/updates/new`)}
+                      sx={{
+                        backgroundColor: "#5cb85c",
+                        "&:hover": { backgroundColor: "#4e9c4e" },
+                        gap: "0.25rem",
+                        alignItems: "center",
+                      }}
+                    >
+                      <EditIcon fontSize="small" />
+                      Post an update
+                    </Button>
+                    <Typography variant="body2" component="p">
+                      Only the organizers and the recipient may post.
+                    </Typography>
+                  </Grid>
+                )}
+                <Grid className="cards" item xs>
+                  <Typography variant="h6" component="h6" fontWeight="bold">
+                    Updates
+                  </Typography>
+                  {trainInfo.updates ? (
+                    trainInfo.updates.map((update, index) => (
+                      <>
+                        <Grid
+                          item
+                          xs
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            flex: "8",
+                            border:
+                              "1px solid rgba(189, 189, 189, 0.5647058824)",
+                            borderRadius: "5px",
+                            padding: "1rem",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          <Typography variant="h4" component="h4">
+                            {update.update_title}
+                          </Typography>
+                          <Typography variant="body1" component="p">
+                            <Box sx={{ fontStyle: "italic" }}>
+                              {`Posted ${moment(update.posted).format(
+                                "MMM DD, YYYY"
+                              )} by ${update.author}`}
+                            </Box>
+                          </Typography>
+                          <Typography variant="body1" component="p">
+                            {update.update_text}
+                          </Typography>
+                        </Grid>
+                      </>
+                    ))
+                  ) : (
+                    <Grid
+                      item
+                      xs
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        flex: "8",
+                        border: "1px solid rgba(189, 189, 189, 0.5647058824)",
+                        borderRadius: "5px",
+                        padding: "1rem",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      <Typography variant="h4" component="h4">
+                        No updates yet. Check back later!
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
+              </div>
+            </Grid>
           </TabPanel>
           <TabPanel value={parentValue} index={2}>
             <form action="">

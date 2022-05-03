@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import moment from "moment";
 import { Divider } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -25,13 +26,12 @@ const style = {
 };
 
 const VolunteerModal = ({
-  title,
   meal,
   openEventModal,
-  setOpenModal,
-  handleOpenModal,
   handleCloseEventModal,
+  trainInfo,
 }) => {
+  const navigate = useNavigate();
   return (
     meal && (
       <>
@@ -147,6 +147,13 @@ const VolunteerModal = ({
               />
               <Button variant="outlined" onClick={handleCloseEventModal}>
                 Close
+              </Button>
+              {/* {trainInfo.individual_meals} */}
+              <Button
+                variant="outlined"
+                onClick={() => navigate(`${meal._def.url}/edit`)}
+              >
+                Edit
               </Button>
             </Box>
           </Box>

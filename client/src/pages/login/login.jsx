@@ -58,6 +58,16 @@ const Login = () => {
           <Button variant="contained" type="submit">
             Sign In
           </Button>
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              setEmail("demo@gmail.com");
+              setPassword("password");
+            }}
+            type="submit"
+          >
+            Demo User
+          </Button>
           {error && <span>Wrong Email or Password!</span>}
         </form>
         <div className="signUp">

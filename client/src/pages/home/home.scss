@@ -1,0 +1,30 @@
+.home {
+  height: 100%;
+
+  .hero {
+    background-color: #a6ce39;
+    img {
+      background-color: transparent;
+    }
+  }
+
+  .body {
+    padding: 2rem;
+    margin-top: 3rem;
+    height: 100vh;
+    width: 80%;
+    margin: auto;
+
+    .card {
+      height: 25vh;
+      padding: 1rem;
+      margin-top: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid rgba(216, 216, 216, 0.75);
+      border-radius: 5px;
+      -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    }
+  }
+}
