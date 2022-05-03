@@ -1,20 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import "./trainUpdates.scss";
-import {
-  Button,
-  FormLabel,
-  Grid,
-  TextField,
-  Checkbox,
-  FormGroup,
-  FormControlLabel,
-  MenuItem,
-  Select,
-  Divider,
-  Box,
-  Table,
-} from "@mui/material";
+import { Button, FormLabel, Grid, TextField, Box } from "@mui/material";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";

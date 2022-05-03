@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "./register.scss";
 import Navbar from "../../components/navBar/Navbar";
 import { createUserWithEmailAndPassword } from "firebase/auth";
