@@ -538,7 +538,7 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
                   <Typography variant="h6" component="h6" fontWeight="bold">
                     Updates
                   </Typography>
-                  {trainInfo.updates ? (
+                  {trainInfo.updates && trainInfo.updates.length > 0 ? (
                     trainInfo.updates.map((update, index) => (
                       <>
                         <Grid

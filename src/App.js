@@ -12,6 +12,7 @@ import VolunteerMeal from "./pages/VolunteerMeal/VolunteerMeal";
 import EditMeal from "./pages/editMeal/EditMeal";
 import TrainUpdates from "./pages/trainUpdates/TrainUpdates";
 import EditVolunteer from "./pages/editVolunteer/EditVolunteer";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -37,6 +38,7 @@ function App() {
             <Route path=":trainId" element={<SingleTrain />}></Route>
             <Route path="create" element={<CreateTrain />} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </Router>

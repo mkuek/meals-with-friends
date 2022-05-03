@@ -4,6 +4,7 @@ import React from "react";
 import "./home.scss";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navBar/Navbar";
+import Footer from "../../components/footer/Footer";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -377,6 +378,7 @@ const Home = () => {
           </Box>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

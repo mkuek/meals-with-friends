@@ -11,6 +11,8 @@ import { AuthContext } from "../../context/authContext";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SingleTrainTabs from "../../components/singleTrainTabs/SingleTrainTabs";
 import AddPhotoModal from "../../components/addPhotoModal/AddPhotoModal";
+import ShareModal from "../../components/shareModal/ShareModal";
+import Footer from "../../components/footer/Footer";
 import moment from "moment";
 
 const SingleTrain = () => {
@@ -23,6 +25,7 @@ const SingleTrain = () => {
     open: false,
     data: "",
   });
+  const [openShareModal, setOpenShareModal] = useState(false);
   const [eventList, setEventList] = useState([]);
 
   const navigate = useNavigate();
@@ -57,6 +60,8 @@ const SingleTrain = () => {
     setOpenPhotoModal({ open: true, data: data });
   const handleClosePhotoModal = () =>
     setOpenPhotoModal({ open: false, data: "" });
+  const handleOpenShareModal = () => setOpenShareModal(true);
+  const handleCloseShareModal = () => setOpenShareModal(false);
 
   useEffect(() => {
     getData();
@@ -248,9 +253,13 @@ const SingleTrain = () => {
                     Number of Participants:
                     <Chip color="primary" size="small" label={memberNum} />
                   </Typography>
-                  <Button variant="contained" size="small">
-                    Share
-                  </Button>
+                  <ShareModal
+                    trainId={trainId}
+                    openShareModal={openShareModal}
+                    setOpenShareModal={setOpenShareModal}
+                    handleOpenShareModal={handleOpenShareModal}
+                    handleCloseShareModal={handleCloseShareModal}
+                  />
                 </div>
               </Slide>
               <Slide
@@ -329,6 +338,7 @@ const SingleTrain = () => {
               </Slide>
             </div>
           </div>
+          <Footer />
         </div>
       )}
     </>
