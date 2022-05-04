@@ -14,15 +14,16 @@
     <img src="https://github.com/othneildrew/Best-README-Template/raw/master/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Meals with Friends!</h3>
 
   <p align="center">
-    project_description
+    A Clone of popular meal planning website <a href="https://mealtrain.com">MealTrain.com</a> 
     <br />
     <a href="https://meals-with-friends.netlify.app/">View Demo</a>
   </p>
 </div>
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 <div align="center"> 
@@ -50,56 +51,53 @@
 
 Meals with Friends is based upon a popular meal-planning application, MealTrain. The site allows people plan and prepare meals for friends or family in the event where they otherwise could not, such as after having a child, having major surgery, or other extended illnesses. Meals are planned for a particular date range, and users can volunteer for specific days to bring a meal. Meal information is displayed in an accessible format for all interested participants.
 
-Login/Registration handled through Firebase Authentication and Context API
+- #### Login/Registration handled through Firebase Authentication and Context API
 <br/>
 <img src="./readMeImages/login.png"/>
 <br/>
 
-Meals are created via tabbed form
+- ### Meals are created via tabbed form
 <br/>
 <img src="./readMeImages/create.png"/>
 <br/>
 
-Dashboard displays all meal trains the logged in user is participating in.
+- ### Dashboard displays all meal trains the logged in user is participating in.
 <br/>
 <img src="./readMeImages/dashboard.png"/>
 <br/>
 
-Dashboard displays all meal trains the logged in user is participating in.
+- ### Dashboard displays all meal trains the logged in user is participating in.
 <br/>
 <img src="./readMeImages/dashboard.png"/>
 <br/>
 
-Individual train information is displayed. Users can volunteer for a particular day usingg the calendar picker. Authenticated meal organizers are allowed to add updates, edit the train information, and meal information.
-<br/>
-<img src="./readMeImages/overview.png"/>
-<br/>
-<img src="./readMeImages/calendar.png"/>
-<br/>
+- ### Individual train information is displayed. Users can volunteer for a particular day usingg the calendar picker. Authenticated meal organizers are allowed to add  ps, edit the train information, and meal information.
+  - ### Authenticated <br/><img src="./readMeImages/overview.png"/><br/>
+  - ### Not Authenticated<br /><img src="./readMeImages/calendar.png"/><br/>
 
-Volunteer page
+- ### Volunteer page
 <br/>
 <img src="./readMeImages/volunteer.png"/>
 <br/>
 
-Edit page
+  - ### Edit page
 <br/>
 <img src="./readMeImages/edit.png"/>
 <br/>
 
-Update page
+  - ### Update page
 <br/>
 <img src="./readMeImages/updates.png"/>
 <br/>
 
-A photo for the train page can be added
+- ### A photo for the train page can be added
 <br/>
 <img src="./readMeImages/addPhotos.png"/>
 <br/>
 
-Meal information modal can be accessed from the calendar picker
+- ### Meal information modal can be accessed from the calendar picker
 <br/>
-<img src="./readMeImages/viewmeal.png"/>
+<img src="./readMeImages/instructions.gif"/>
 <br/>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -156,8 +154,7 @@ Michael Kuek - mkuek123@gmail.com
 
 ## Acknowledgments
 
-- This project was made possible by[MealTrain](https://www.mealtrain.com/)
-- []()
-- []()
+- This project was made possible by [MealTrain](https://www.mealtrain.com/)
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
