@@ -4,7 +4,15 @@ import "./singleTrain.scss";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Chip, easing, Slide, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  easing,
+  Grid,
+  Slide,
+  Typography,
+} from "@mui/material";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import EditIcon from "@mui/icons-material/Edit";
 import { AuthContext } from "../../context/authContext";
@@ -142,36 +150,38 @@ const SingleTrain = () => {
       {trainInfo && (
         <div className="singleTrain">
           <div className="title">
-            <div className="title-left">
-              <Typography variant="h6" component="div">
-                Meal Train for
-              </Typography>
-              <Typography variant="h4" component="div">
-                {trainInfo.meal_recipient}
-              </Typography>
-            </div>
-            <div className="title-right">
-              {trainInfo.created_by === currentUser.uid && (
-                <>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => navigate(`/trains/${trainId}/updates/new`)}
-                  >
-                    <ForumOutlinedIcon fontSize="small" />
-                    Post an Update
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => navigate(`/trains/${trainId}/edit`)}
-                  >
-                    <EditIcon fontSize="small" />
-                    Make Changes
-                  </Button>
-                </>
-              )}
-            </div>
+            <Grid container justifyContent="space-between">
+              <Grid item xs={12} sm={4} className="title-left">
+                <Typography variant="h6" component="div">
+                  Meal Train for
+                </Typography>
+                <Typography variant="h4" component="div">
+                  {trainInfo.meal_recipient}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={4} lg={3} xl={2} className="title-right">
+                {trainInfo.created_by === currentUser.uid && (
+                  <>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => navigate(`/trains/${trainId}/updates/new`)}
+                    >
+                      <ForumOutlinedIcon fontSize="small" />
+                      Post an Update
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => navigate(`/trains/${trainId}/edit`)}
+                    >
+                      <EditIcon fontSize="small" />
+                      Make Changes
+                    </Button>
+                  </>
+                )}
+              </Grid>
+            </Grid>
           </div>
           <div className="body">
             <div className="left">
