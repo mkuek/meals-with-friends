@@ -28,7 +28,10 @@ const Home = () => {
               backgroundColor: "#A6CE39",
             }}
           >
-            <img src="https://www.mealtrain.com/content/img/app/tokens/story.png"></img>
+            <img
+              src="https://www.mealtrain.com/content/img/app/tokens/story.png"
+              alt="home splash"
+            ></img>
           </Box>
           <Box
             sx={{
@@ -40,7 +43,11 @@ const Home = () => {
               gap: "0.5rem",
             }}
           >
-            <Slide direction="right" in={true} mountOnEnter unmountOnExit>
+            <Slide
+              direction="left"
+              in={true}
+              timeout={{ appear: 100, enter: 500 }}
+            >
               <Button
                 variant="contained"
                 size="large"
@@ -55,7 +62,11 @@ const Home = () => {
                 Get Started
               </Button>
             </Slide>
-            <Slide direction="right" in={true} mountOnEnter unmountOnExit>
+            <Slide
+              direction="right"
+              in={true}
+              timeout={{ appear: 100, enter: 500 }}
+            >
               <Link href="trains/create" underline="hover">
                 <Typography
                   component="h4"
@@ -72,18 +83,28 @@ const Home = () => {
         </div>
         <div className="body">
           <Box>
-            <Box>
-              <Typography
-                component="h4"
-                variant="h4"
-                align="left"
-                gutterBottom
-                sx={{ color: "#00BCE4", marginTop: "1rem" }}
-              >
-                How it Works
-              </Typography>
-            </Box>
-            <Slide direction="right" in={true} mountOnEnter unmountOnExit>
+            <Slide
+              direction="right"
+              in={true}
+              timeout={{ appear: 200, enter: 500 }}
+            >
+              <Box>
+                <Typography
+                  component="h4"
+                  variant="h4"
+                  align="left"
+                  gutterBottom
+                  sx={{ color: "#00BCE4", marginTop: "1rem" }}
+                >
+                  How it Works
+                </Typography>
+              </Box>
+            </Slide>
+            <Slide
+              direction="right"
+              in={true}
+              timeout={{ appear: 400, enter: 500 }}
+            >
               <div className="card">
                 <Box sx={{ width: "75%", margin: "auto" }}>
                   <Typography
@@ -154,7 +175,11 @@ const Home = () => {
                 </Box>
               </div>
             </Slide>
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+            <Slide
+              direction="left"
+              in={true}
+              timeout={{ appear: 600, enter: 500 }}
+            >
               <div className="card">
                 <Box sx={{ width: "75%", margin: "auto" }}>
                   <Typography

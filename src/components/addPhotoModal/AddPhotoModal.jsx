@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Divider, Modal, Typography, Button, Box } from "@mui/material";
+import { Divider, Modal, Typography, Button, Box, Grow } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
@@ -15,8 +15,8 @@ import { useParams } from "react-router-dom";
 
 const style = {
   position: "absolute",
-  top: "50%",
-  left: "50%",
+  top: "25%",
+  left: "25%",
   transform: "translate(-50%, -50%)",
   width: "50%",
   height: "50%",
@@ -108,135 +108,142 @@ const AddPhotoModal = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
+        <Grow
+          in={openPhotoModal.open}
+          direction="right"
+          mountOnEnter
+          unmountOnExit
+        >
+          <Box sx={style}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 width: "100%",
-                alignContent: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6" component="h2">
-                  Add a Photo
-                </Typography>
-                <CloseIcon
-                  onClick={handleClosePhotoModal}
-                  sx={{ cursor: "pointer" }}
-                />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                  alignContent: "center",
+                }}
+              >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="h6" component="h2">
+                    Add a Photo
+                  </Typography>
+                  <CloseIcon
+                    onClick={handleClosePhotoModal}
+                    sx={{ cursor: "pointer" }}
+                  />
+                </Box>
+                <Divider style={{ width: "100%", margin: "0" }} />
               </Box>
-              <Divider style={{ width: "100%", margin: "0" }} />
             </Box>
-          </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "1rem",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-              justifyContent: "space-between",
-              gap: "1rem",
-              overflow: "hidden",
-            }}
-          >
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: "80%",
-                height: "100%",
-                borderRadius: "5px",
-                backgroundColor: "#C9C9C9",
-                margin: "auto",
-                justifyContent: "center",
+                marginTop: "1rem",
                 alignItems: "center",
+                width: "100%",
+                height: "100%",
+                justifyContent: "space-between",
+                gap: "1rem",
                 overflow: "hidden",
               }}
             >
-              {file ? (
-                <Box
-                  sx={{
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
-                  <img
-                    src={data.img}
-                    style={{
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "80%",
+                  height: "100%",
+                  borderRadius: "5px",
+                  backgroundColor: "#C9C9C9",
+                  margin: "auto",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  overflow: "hidden",
+                }}
+              >
+                {file ? (
+                  <Box
+                    sx={{
                       height: "100%",
                       width: "100%",
-                      objectFit: "contain",
                     }}
-                  ></img>
-                </Box>
-              ) : (
-                <InsertPhotoOutlinedIcon />
-              )}
+                  >
+                    <img
+                      src={data.img}
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        objectFit: "contain",
+                      }}
+                    ></img>
+                  </Box>
+                ) : (
+                  <InsertPhotoOutlinedIcon />
+                )}
+              </Box>
+              <form action="">
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id="imageUploadInput"
+                  onChange={handleImage}
+                />
+                <label htmlFor="imageUploadInput">
+                  <Button
+                    component="span"
+                    variant="contained"
+                    sx={{
+                      color: "#FFF",
+                      backgroundColor: "#5cb85c",
+                      "&:hover": { backgroundColor: "#4e9c4e" },
+                    }}
+                  >
+                    <AddIcon sx={{ color: "white" }} /> Select new photo...
+                  </Button>
+                </label>
+              </form>
             </Box>
-            <form action="">
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="imageUploadInput"
-                onChange={handleImage}
-              />
-              <label htmlFor="imageUploadInput">
-                <Button
-                  component="span"
-                  variant="contained"
-                  sx={{
-                    color: "#FFF",
-                    backgroundColor: "#5cb85c",
-                    "&:hover": { backgroundColor: "#4e9c4e" },
-                  }}
-                >
-                  <AddIcon sx={{ color: "white" }} /> Select new photo...
-                </Button>
-              </label>
-            </form>
-          </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              flexDirection: "column",
-              width: "100%",
-              justifyContent: "center",
-            }}
-          >
-            <Divider
-              style={{
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                flexDirection: "column",
                 width: "100%",
-                marginBottom: "1rem",
-                marginTop: "1rem",
+                justifyContent: "center",
               }}
-            />
-            <Box sx={{ display: "flex", gap: "1rem" }}>
-              {data.img && (
-                <Button variant="contained" onClick={() => handleSubmit()}>
-                  Upload
+            >
+              <Divider
+                style={{
+                  width: "100%",
+                  marginBottom: "1rem",
+                  marginTop: "1rem",
+                }}
+              />
+              <Box sx={{ display: "flex", gap: "1rem" }}>
+                {data.img && (
+                  <Button variant="contained" onClick={() => handleSubmit()}>
+                    Upload
+                  </Button>
+                )}
+                <Button variant="outlined" onClick={handleClosePhotoModal}>
+                  Done
                 </Button>
-              )}
-              <Button variant="outlined" onClick={handleClosePhotoModal}>
-                Done
-              </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        </Grow>
       </Modal>
     </>
   );

@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
@@ -595,18 +596,29 @@ const SingleTrainTabs = ({ trainInfo, trainLength, eventList }) => {
             </Grid>
           </TabPanel>
           <TabPanel value={parentValue} index={2}>
-            <form action="">
-              <Grid container spacing={1}>
-                <Grid item xs={6}></Grid>
-                <Grid item xs={6}></Grid>
-                <Grid item xs={12}></Grid>
-                <Grid item xs={12} sm={6} md={6}></Grid>
-                <Grid item xs={12} sm={6} md={6}></Grid>
-                <Grid item xs={12} sm={6} md={6}></Grid>
-                <Grid item xs={12} sm={6} md={6}></Grid>
+            <Grid container spacing={1}>
+              <Grid
+                item
+                xs
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "1rem",
+                  gap: "0.5rem",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  border: "1px solid rgba(189, 189, 189, 0.5647058824)",
+                  borderRadius: "5px",
+                  color: "#FFF",
+                  backgroundColor: "#f08b1d",
+                }}
+              >
+                <EngineeringIcon fontSize="large" />
+                <Typography variant="h5" component="h4">
+                  Component under construction!
+                </Typography>
               </Grid>
-              <Grid container justify="flex-end" className="nextButton"></Grid>
-            </form>
+            </Grid>
           </TabPanel>
         </Box>
       </Grid>

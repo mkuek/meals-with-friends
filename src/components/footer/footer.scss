@@ -1,9 +1,9 @@
 .footer {
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: static;
   left: 0;
-  bottom: 0;
+  bottom: 1rem;
   height: 100px;
   width: 80%;
   justify-content: space-between;
@@ -33,5 +33,6 @@
   }
   .footer-bottom {
     margin: auto;
+    padding-bottom: 1rem;
   }
 }

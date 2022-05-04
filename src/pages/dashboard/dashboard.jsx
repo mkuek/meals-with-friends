@@ -1,6 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/navBar/Navbar";
-import { Button, Divider, Link, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  easing,
+  Link,
+  Slide,
+  Typography,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -49,57 +56,64 @@ const Dashboard = () => {
           {trainData &&
             trainData.map((train, index) => (
               <>
-                <div className="list">
-                  <div className="left">
-                    {train.data.img !== "" ? (
-                      <img src={train.data.img} alt="meal-train-image" />
-                    ) : (
-                      <img
-                        src="https://www.mealtrain.com/content/img/app/tokens/appointments-sm.png"
-                        alt="no-picture-rovided"
-                      />
-                    )}
+                <Slide
+                  in={true}
+                  direction="down"
+                  easing={{ enter: easing.easeIn }}
+                  timeout={{ appear: 100, enter: 150 }}
+                >
+                  <div className="list">
+                    <div className="left">
+                      {train.data.img !== "" ? (
+                        <img src={train.data.img} alt="meal-train-image" />
+                      ) : (
+                        <img
+                          src="https://www.mealtrain.com/content/img/app/tokens/appointments-sm.png"
+                          alt="no-picture-rovided"
+                        />
+                      )}
+                    </div>
+                    <div className="center">
+                      <Typography variant="body1" component="div">
+                        Meal Train for:
+                      </Typography>
+                      <Typography variant="h4" component="div">
+                        <Link href={`/trains/${train.id}`} underline="none">
+                          {train.data.meal_recipient}
+                        </Link>
+                      </Typography>
+                    </div>
+                    <div className="right">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => navigate(`/trains/${train.id}`)}
+                      >
+                        <SearchIcon fontSize="small" />
+                        Open
+                      </Button>
+                      {train.data.created_by == currentUser.uid ? (
+                        <>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => navigate(`/trains/${train.id}/edit`)}
+                          >
+                            <EditIcon fontSize="small" />
+                            Make Changes
+                          </Button>
+                        </>
+                      ) : (
+                        <div>
+                          <Button variant="outlined" size="small">
+                            <DeleteIcon fontSize="small" />
+                            Remove Me
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="center">
-                    <Typography variant="body1" component="div">
-                      Meal Train for:
-                    </Typography>
-                    <Typography variant="h4" component="div">
-                      <Link href={`/trains/${train.id}`} underline="none">
-                        {train.data.meal_recipient}
-                      </Link>
-                    </Typography>
-                  </div>
-                  <div className="right">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={() => navigate(`/trains/${train.id}`)}
-                    >
-                      <SearchIcon fontSize="small" />
-                      Open
-                    </Button>
-                    {train.data.created_by == currentUser.uid ? (
-                      <>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={() => navigate(`/trains/${train.id}/edit`)}
-                        >
-                          <EditIcon fontSize="small" />
-                          Make Changes
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button variant="outlined" size="small">
-                          <DeleteIcon fontSize="small" />
-                          Remove Me
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
+                </Slide>
                 <Divider style={{ width: "100%" }} />
               </>
             ))}
