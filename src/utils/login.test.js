@@ -1,6 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createMemoryHistory } from "history";
-import { MemoryRouter, Router } from "react-router-dom";
+import { MemoryRouter, Route, Router, Routes } from "react-router-dom";
+import Dashboard from "../pages/dashboard/dashboard";
+import Home from "../pages/home/Home";
 import Login from "../pages/login/login";
 
 test("username input should be rendered", () => {
@@ -42,13 +45,21 @@ test("buttons should be rendered", () => {
   expect(demoButton).toBeInTheDocument();
 });
 
-test("demo sign in works", () => {
-    render(
-    <MemoryRouter initialEntries={["/login"]}>
-        <Login />
+test("demo sign in works", async () => {
+  const user = userEvent.setup();
+  render(
+    <MemoryRouter initialEntries={["/"]}>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+      </Routes>
     </MemoryRouter>
   );
-  const user = userEvent.setup();
-  await user.click(screen.getByText(/demo user/i));
-  expect(screen.getByText(/rganize meals/i)).toBeInTheDocument();
-})
+  const demoButton = screen.getByTestId("demoButton");
+  expect(demoButton).toBeInTheDocument();
+  userEvent.click(demoButton);
+  expect(screen.getByText(/my dashboard/i)).toBeInTheDocument();
+});

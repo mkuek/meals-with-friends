@@ -70,6 +70,7 @@ const Login = () => {
                 setPassword("password");
               }}
               type="submit"
+              data-testid="demoButton"
             >
               Demo User
             </Button>
