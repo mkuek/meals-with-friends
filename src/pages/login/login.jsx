@@ -56,7 +56,11 @@ const Login = () => {
               placeholder="Your password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button variant="contained" type="submit">
+            <Button
+              variant="contained"
+              type="submit"
+              data-testid="signInButton"
+            >
               Sign In
             </Button>
             <Button
